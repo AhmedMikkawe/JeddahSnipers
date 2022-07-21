@@ -11,16 +11,19 @@ namespace JeddahSnipers.Models
     {
         [Key]
         public int StudentId { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings =false,ErrorMessage ="This Field Can't be less than 2 characters")]
+        [StringLength(50, MinimumLength = 2)]
         public string FirstName { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "This Field Can't be less than 2 characters")]
+        [StringLength(50, MinimumLength = 2)]
         public string LastName { get; set; }
         [Required]
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime BirthDate { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "This Field Can't be less than 8 characters")]
+        [StringLength(50, MinimumLength = 8)]
         public string Password { get; set; }
         [Required]
         [Phone]

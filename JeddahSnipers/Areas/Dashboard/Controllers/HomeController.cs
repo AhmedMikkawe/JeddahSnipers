@@ -37,54 +37,58 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         [HttpPost]
         public ActionResult AddNewStudent(StudentAndParent studentAndparent)
         {
-            Student stuobj = new Student();
-
-            string stdNIdFileName = string.Empty;
-            if (studentAndparent.StudentNationalIDFile != null)
+            if (ModelState.IsValid)
             {
-                Guid guid = Guid.NewGuid();
+                Student stuobj = new Student();
 
-                string newfileName = guid.ToString();
+                string stdNIdFileName = string.Empty;
+                if (studentAndparent.StudentNationalIDFile != null)
+                {
+                    Guid guid = Guid.NewGuid();
+
+                    string newfileName = guid.ToString();
 
 
-                string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                stdNIdFileName = studentAndparent.StudentNationalIDFile.FileName;
-                string fullPath = Path.Combine(uploads, stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName));
-                studentAndparent.StudentNationalIDFile.CopyTo(new FileStream(fullPath, FileMode.Create));
-                stdNIdFileName = stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName);
+                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                    stdNIdFileName = studentAndparent.StudentNationalIDFile.FileName;
+                    string fullPath = Path.Combine(uploads, stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName));
+                    studentAndparent.StudentNationalIDFile.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    stdNIdFileName = stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName);
+                }
+
+                stuobj.FirstName = studentAndparent.student.FirstName;
+                stuobj.LastName = studentAndparent.student.LastName;
+                stuobj.BirthDate = studentAndparent.student.BirthDate;
+                stuobj.Password = studentAndparent.student.Password;
+                stuobj.Phone = studentAndparent.student.Phone;
+                stuobj.Address = studentAndparent.student.Address;
+                stuobj.NationalIDFile = stdNIdFileName;
+                stuobj.ApplicationFile = studentAndparent.student.ApplicationFile;
+                stuobj.Gender = studentAndparent.student.Gender;
+                stuobj.Weight = studentAndparent.student.Weight;
+                stuobj.Height = studentAndparent.student.Height;
+                stuobj.BloodType = studentAndparent.student.BloodType;
+                stuobj.PowerOfSight = studentAndparent.student.PowerOfSight;
+                stuobj.AllergicTo = studentAndparent.student.AllergicTo;
+                stuobj.FavoriteFoot = studentAndparent.student.FavoriteFoot;
+                stuobj.VitaminDeficiency = studentAndparent.student.VitaminDeficiency;
+                stuobj.HealthProblems = studentAndparent.student.HealthProblems;
+                stuobj.HealthProblemsDesc = studentAndparent.student.HealthProblemsDesc;
+                stuobj.Nationality = studentAndparent.student.Nationality;
+                stuobj.ParentRelation = studentAndparent.student.ParentRelation;
+
+                stuobj.ParentFirstName = studentAndparent.student.ParentFirstName;
+                stuobj.ParentLastName = studentAndparent.student.ParentLastName;
+                stuobj.ParentPhone = studentAndparent.student.ParentPhone;
+                stuobj.ParentEmergencyPhone = studentAndparent.student.ParentEmergencyPhone;
+
+                _wonder.Students.Add(stuobj);
+                _wonder.SaveChanges();
+
+                return RedirectToAction("StudentMenu");
+
             }
-
-            stuobj.FirstName = studentAndparent.StudentFirstName;
-            stuobj.LastName = studentAndparent.StudentLastName;
-            stuobj.BirthDate = studentAndparent.StudentBirthDate;
-            stuobj.Password = studentAndparent.StudentPassword;
-            stuobj.Phone = studentAndparent.StudentPhone;
-            stuobj.Address = studentAndparent.StudentAddress;
-            stuobj.NationalIDFile = stdNIdFileName;
-            stuobj.ApplicationFile = studentAndparent.StudentApplicationFile;
-            stuobj.Gender = studentAndparent.StudentGender;
-            stuobj.Weight = studentAndparent.StudentWeight;
-            stuobj.Height = studentAndparent.StudentHeight;
-            stuobj.BloodType = studentAndparent.StudentBloodType;
-            stuobj.PowerOfSight = studentAndparent.StudentPowerOfSight;
-            stuobj.AllergicTo = studentAndparent.StudentAllergicTo;
-            stuobj.FavoriteFoot = studentAndparent.StudentFavoriteFoot;
-            stuobj.VitaminDeficiency = studentAndparent.StudentVitaminDeficiency;
-            stuobj.HealthProblems = studentAndparent.StudentHealthProblems;
-            stuobj.HealthProblemsDesc = studentAndparent.StudentHealthProblemsDesc;
-            stuobj.Nationality = studentAndparent.StudentNationality;
-            stuobj.ParentRelation = studentAndparent.Parentrelation;
-
-            stuobj.ParentFirstName = studentAndparent.ParentFirstName;
-            stuobj.ParentLastName = studentAndparent.ParentLastName;
-            stuobj.ParentPhone = studentAndparent.ParentPhone;
-            stuobj.ParentEmergencyPhone = studentAndparent.ParentEmergencyPhone;
-
-            _wonder.Students.Add(stuobj);
-            _wonder.SaveChanges();
-
-            return RedirectToAction("StudentMenu");
-
+            return View(studentAndparent);
 
             //var filePath = Path.Combine(_hostingEnv.WebRootPath, "Images");
             //if (Photo_1 != null)
@@ -111,26 +115,27 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public ActionResult StudentsData()
         {
-            List<StudentAndParent> data = new List<StudentAndParent>();
+
+            List<Student> data = new List<Student>();
             var obj = _wonder.Students.Select(x => x).ToList();
             foreach (var item in obj)
             {
-                StudentAndParent O = new StudentAndParent();
-                O.StudentId = item.StudentId;
-                O.StudentBirthDate = item.BirthDate;
-                O.StudentPhone = item.Phone;
-                O.StudentNationality = item.Nationality;
-                O.StudentGender = item.Gender;
-                O.StudentFirstName = item.FirstName + " " + item.LastName; //full name not first name
-                if (item.Category != null)
-                {
-                    O.StudentCategory = item.Category.CategoryName;
-                }
-                if (item.Group != null)
-                {
-                    O.StudentGroup = item.Group.GroupName;
-                }
-                data.Add(O);
+                //StudentAndParent O = new StudentAndParent();
+                //O.student.StudentId = item.StudentId;   
+                //O.student.BirthDate = item.BirthDate;
+                //O.student.Phone = item.Phone;
+                //O.student.Nationality = item.Nationality;
+                //O.student.Gender = item.Gender;
+                //O.StudentFirstName = item.FirstName + " " + item.LastName; //full name not first name
+                //if (item.Category != null)
+                //{
+                //    O.student.Category.CategoryName = item.Category.CategoryName;
+                //}
+                //if (item.Group != null)
+                //{
+                //    O.student.Group.GroupName = item.Group.GroupName;
+                //}
+                data.Add(item);
             }
             return Json(data);
         }

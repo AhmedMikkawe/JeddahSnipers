@@ -10,6 +10,7 @@
         <form role="form" method="post" asp-action="AddNewStudent" enctype="multipart/form-data">
             <div class="row mt-2">
                 <div class="col-12 col-md-6">
+                    <div class="text-danger" asp-validation-summary="ModelOnly" ></div>
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
@@ -29,9 +30,9 @@
                                         <label for="StudentFirstName">الاسم الاول</label>
                                         <input type="text"
                                                class="form-control"
-                                               name="StudentFirstName"
-                                               id="StudentFirstName"
-                                               placeholder="الاسم الاول"/>
+                                               asp-for="student.FirstName"                                               
+                                                placeholder="الاسم الاول"/>
+                                               <span asp-validation-for="student.FirstName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -39,9 +40,9 @@
                                         <label for="StudentLastName">اسم العائلة</label>
                                         <input type="text"
                                                class="form-control"
-                                               name="StudentLastName"
-                                               id="StudentLastName"
+                                               asp-for="student.LastName"
                                                placeholder="اسم العائلة"/>
+                                               <span asp-validation-for="student.LastName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -49,18 +50,21 @@
                                         <label for="StudentBirthDate">تاريخ الميلاد</label>
                                         <input type="date"
                                                class="form-control"
-                                               id="StudentBirthDate"
-                                               name="StudentBirthDate"/>
+                                               asp-for="student.BirthDate"/>
+                                         <span asp-validation-for="student.BirthDate" class="text-danger"></span>
+
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentNationality">الجنسية</label>
-                                        <select class="form-control" id="StudentNationality"name="StudentNationality" >
+                                        <select class="form-control" asp-for="student.Nationality" >
                                             <option value="">اختر الجنسية</option>
                                             <option value="مقيم">مقيم</option>
                                             <option value="سعودي">سعودي</option>
                                         </select>
+                                        <span asp-validation-for="student.Nationality" class="text-danger"></span>
+
                                     </div>
                                 </div>
                                 @*<div class="col-12 col-md-6">
@@ -79,8 +83,9 @@
                                         <label for="StudentPhone">رقم الجوال</label>
                                         <input type="text"
                                                class="form-control"
-                                               id="StudentPhone"
-                                               name="StudentPhone" />
+                                               asp-for="student.Phone"
+                                                />
+                                               <span asp-validation-for="student.Phone" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -88,8 +93,9 @@
                                         <label for="StudentNationalIDFile">رفع هوية الطالب</label>
                                         <input type="file"
                                                class="form-control-file"
-                                               id="StudentNationalIDFile"
-                                               name="StudentNationalIDFile" />
+                                               
+                                               asp-for="StudentNationalIDFile" />
+                                               <span asp-validation-for="StudentNationalIDFile" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -97,8 +103,8 @@
                                         <label for="StudentApplicationFile">رفع النموذج</label>
                                         <input type="file"
                                                class="form-control-file"
-                                               id="StudentApplicationFile"
-                                               name="StudentApplicationFile" />
+                                               asp-for="student.ApplicationFile" />
+                                               <span asp-validation-for="student.ApplicationFile" class="text-danger"></span>
                                     </div>
                                 </div>
 
@@ -106,9 +112,9 @@
                                     <div class="form-group">
                                         <label for="StudentAddress">العنوان</label>
                                         <textarea class="form-control"
-                                                  id="StudentAddress"
                                                   rows="3"
-                                                  name="StudentAddress"></textarea>
+                                                  asp-for="student.Address"></textarea>
+                                                  <span asp-validation-for="student.Address" class="text-danger"></span>
                                     </div>
                                 </div>
 
@@ -117,9 +123,9 @@
                                         <label for="StudentPassword">كلمة المرور</label>
                                         <input type="password"
                                                class="form-control"
-                                               id="StudentPassword"
                                                placeholder="كلمة المرور"
-                                               name="StudentPassword" />
+                                               asp-for="student.Password" />
+                                               <span asp-validation-for="student.Password" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -142,9 +148,9 @@
                                         <label for="ParentFirstName">الاسم الاول</label>
                                         <input type="text"
                                                class="form-control"
-                                               id="ParentFirstName"
                                                placeholder="الاسم الاول"
-                                               name="ParentFirstName" />
+                                               asp-for="student.ParentFirstName" />
+                                               <span asp-validation-for="student.ParentFirstName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -152,9 +158,10 @@
                                         <label for="ParentLastName">اسم العائلة</label>
                                         <input type="text"
                                                class="form-control"
-                                               id="ParentLastName"
                                                placeholder="اسم العائلة"
-                                               name="ParentLastName" />
+                                               asp-for="student.ParentLastName" />
+                                               <span asp-validation-for="student.ParentLastName" class="text-danger"></span>
+
                                     </div>
                                 </div>
 
@@ -163,8 +170,8 @@
                                         <label for="ParentPhone">رقم الجوال</label>
                                         <input type="text"
                                                class="form-control"
-                                               id="ParentPhone"
-                                               name="ParentPhone" />
+                                               asp-for="student.ParentPhone" />
+                                               <span asp-validation-for="student.ParentPhone" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -172,14 +179,14 @@
                                         <label for="ParentEmergencyPhone">رقم الجوال للطوارئ</label>
                                         <input type="text"
                                                class="form-control"
-                                               id="ParentEmergencyPhone"
-                                               name="ParentEmergencyPhone" />
+                                               asp-for="student.ParentEmergencyPhone" />
+                                               <span asp-validation-for="student.ParentEmergencyPhone" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="Parentrelation">ولي الأمر</label>
-                                        <select class="form-control" id="Parentrelation" name="Parentrelation">
+                                        <select class="form-control"  asp-for="student.ParentRelation">
                                             <option value="">صلة القرابة</option>
                                             <option value="اخ">اخ</option>
                                             <option value="اخت">اخت</option>
@@ -187,6 +194,7 @@
                                             <option value="والدة">والدة</option>
                                             <option value="اخرى">اخرى</option>
                                         </select>
+                                        <span asp-validation-for="student.ParentRelation" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -207,10 +215,11 @@
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentGender">الجنس</label>
-                                        <select class="form-control" id="StudentGender" name="StudentGender">
+                                        <select class="form-control" asp-for="student.Gender">
                                             <option value="ذكر">ذكر</option>
                                             <option value="أنثى">أنثى</option>
                                         </select>
+                                        <span asp-validation-for="student.Gender" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -218,22 +227,23 @@
                                         <label for="StudentWeight">الوزن</label>
                                         <input type="text"
                                                class="form-control"
-                                               id="StudentWeight"
                                                placeholder="الوزن"
-                                               name="StudentWeight" />
+                                               asp-for="student.Weight" />
+                                               <span asp-validation-for="student.Weight" class="text-danger"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentHeight">الطول</label>
-                                        <input type="text" class="form-control" id="StudentHeight" name="StudentHeight" />
+                                        <input type="text" class="form-control" asp-for="student.Height" />
+                                        <span asp-validation-for="student.Height" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentBloodType">فصيلة الدم</label>
-                                        <select class="form-control" id="StudentBloodType" name="StudentBloodType">
+                                        <select class="form-control" asp-for="student.BloodType">
                                             <option value="">حدد فصيلة الدم</option>
                                             <option value="A-">A-</option>
                                             <option value="A+">A+</option>
@@ -243,33 +253,37 @@
                                             <option value="O-">O-</option>
                                             <option value="B-">B-</option>
                                         </select>
+                                        <span asp-validation-for="student.BloodType" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentFavoriteFoot">القدم المفضلة</label>
-                                        <select class="form-control" id="StudentFavoriteFoot" name="StudentFavoriteFoot">
+                                        <select class="form-control" asp-for="student.FavoriteFoot">
                                             <option value="">حدد القدم المفضلة</option>
                                             <option value="اليمنى">اليمنى</option>
                                             <option value="اليسرى">اليسرى</option>
                                             <option value="">الاثنين</option>
                                         </select>
+                                        <span asp-validation-for="student.FavoriteFoot" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentPowerOfSight">النظر</label>
-                                        <select class="form-control" id="StudentPowerOfSight" name="StudentPowerOfSight">
+                                        <select class="form-control" asp-for="student.PowerOfSight">
                                             <option value="">قوة النظر</option>
                                             <option value="جيدة">جيدة</option>
                                             <option value="يحتاج نظارة">يحتاج نظارة</option>
                                         </select>
+                                        <span asp-validation-for="student.PowerOfSight" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentAllergicTo">حساسية من</label>
-                                        <input type="text" class="form-control" id="StudentAllergicTo" name="StudentAllergicTo" />
+                                        <input type="text" class="form-control" asp-for="student.AllergicTo" />
+                                        <span asp-validation-for="student.AllergicTo" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -281,20 +295,20 @@
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input"
                                                        type="radio"
-                                                       name="StudentVitaminDeficiency"
-                                                       id="StudentVitaminDeficiency"
-                                                       value="True" name="StudentVitaminDeficiency" />
+                                                      
+                                                       value="True" asp-for="student.VitaminDeficiency" />
                                                 <label class="form-check-label"
                                                        for="vitlacknessyes">نعم</label>
+                                                       <span asp-validation-for="student.VitaminDeficiency" class="text-danger"></span>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input"
                                                        type="radio"
-                                                       name="StudentVitaminDeficiency"
-                                                       id="StudentVitaminDeficiency"
-                                                       value="False" name="StudentVitaminDeficiency" />
+                                                       asp-for="student.VitaminDeficiency"
+                                                       value="False"  />
                                                 <label class="form-check-label"
                                                        for="vitlacknessno">لا</label>
+                                                       <span asp-validation-for="student.VitaminDeficiency" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -310,24 +324,24 @@
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input"
                                                        type="radio"
-                                                       name="StudentHealthProblems"
-                                                       id="StudentHealthProblems"
-                                                       value="True" name="StudentHealthProblems" />
+                                                       value="True" asp-for="student.HealthProblems" />
                                                 <label class="form-check-label"
                                                        for="healthProblemsYes">نعم</label>
+                                                       <span asp-validation-for="student.HealthProblems" class="text-danger"></span>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input"
                                                        type="radio"
-                                                       name="StudentHealthProblems"
-                                                       id="StudentHealthProblems"
-                                                       value="False" name="StudentHealthProblems" />
+                                                       value="False" asp-for="student.HealthProblems" />
                                                 <label class="form-check-label"
                                                        for="healthProblemsNo">لا</label>
+                                                       <span asp-validation-for="student.HealthProblems" class="text-danger"></span>
+
                                             </div>
                                             <input type="text"
                                                    class="form-control"
-                                                   id="StudentHealthProblemsDesc" name="StudentHealthProblemsDesc" />
+                                                    asp-for="student.HealthProblemsDesc" />
+                                                   <span asp-validation-for="student.HealthProblemsDesc" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
