@@ -31,7 +31,7 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                
+
 
             </div>
         </div>
@@ -70,30 +70,31 @@
                     bSort: true,
                     bPaginate: true,
                     data: response,
-                    columns: [{ title: 'رقم الهوية', 'data': 'studentId', className: 'vertical' },
-                    { title: 'الاسم', 'data': 'firstName', className: 'vertical' },
-                    { title: 'تاريخ الميلاد', 'data': 'birthDate', className: 'vertical' ,
-                    "render": function (data, type, full, meta) {
+                    columns: [{ title: 'رقم الهوية', 'data': 'student.studentId', className: 'vertical' },
+                    { title: 'الاسم', 'data': 'studentName', className: 'vertical' },
+                    {
+                        title: 'تاريخ الميلاد', 'data': 'student.birthDate', className: 'vertical',
+                        "render": function (data, type, full, meta) {
                             return moment(data).format('DD/MM/YYYY');
                         }
                     },
-                    { title: 'رقم الجوال', 'data': 'phone', className: 'vertical' },
-                    { title: 'الجنسيه', 'data': 'nationality', className: 'vertical' },
-                    { title: 'مجموعه', 'data': 'group', className: 'vertical' },
-                    { title: 'الجنس', 'data': 'gender', className: 'vertical' },
-                    { title: 'التصنيف', 'data': 'category', className: 'vertical' },
+                    { title: 'رقم الجوال', 'data': 'student.phone', className: 'vertical' },
+                    { title: 'الجنسيه', 'data': 'student.nationality', className: 'vertical' },
+                    { title: 'الجنس', 'data': 'student.gender', className: 'vertical' },
+                    { title: 'مجموعه', 'data': 'groupName', className: 'vertical' },
+                    { title: 'التصنيف', 'data': 'categoryName', className: 'vertical' },
                     {
                         orderable: false, data: null, defaultContent: '', className: 'vertical',
                         "render": function (data, type, full, meta) {
                             return '<a onclick="GetImages(' + "'" + full.caseCode + "'" + ')" data-toggle="modal" data-target="#myModal" style="margin-left: 5px; margin-right: 5px;cursor:pointer;"><i style="color:darkblue; font-size:large;" class="fa-solid fa-camera-retro"></i></a>';
                         }
                     }
-                            //{
-                            //    orderable: false, data: null, defaultContent: '', className: 'options vertical',
-                            //    "render": function (data, type, full, meta) {
-                            //        return '<a style="cursor:pointer" class="options"><i class="fa-solid fa-ellipsis-vertical"></i></a> ';
-                            //    }
-                            /*}*/]
+                                    //{
+                                    //    orderable: false, data: null, defaultContent: '', className: 'options vertical',
+                                    //    "render": function (data, type, full, meta) {
+                                    //        return '<a style="cursor:pointer" class="options"><i class="fa-solid fa-ellipsis-vertical"></i></a> ';
+                                    //    }
+                                    /*}*/]
                 });
 
         };

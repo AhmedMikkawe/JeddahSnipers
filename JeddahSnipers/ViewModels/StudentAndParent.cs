@@ -1,5 +1,4 @@
-﻿
-using JeddahSnipers.Models;
+﻿using JeddahSnipers.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,11 @@ namespace JeddahSnipers.ViewModels
     public partial class StudentAndParent
     {
         public Student student { get; set; }
-        public string StudentFirstName { get; set; }
+        public string StudentName { get; set; }
+        public Category Category { get; set; }
+        public string CategoryName { get; set; }
+        public Group Group { get; set; }
+        public string GroupName { get; set; }
         public IFormFile StudentNationalIDFile { get; set; }
     }
 }

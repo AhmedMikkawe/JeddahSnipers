@@ -76,6 +76,8 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 stuobj.HealthProblemsDesc = studentAndparent.student.HealthProblemsDesc;
                 stuobj.Nationality = studentAndparent.student.Nationality;
                 stuobj.ParentRelation = studentAndparent.student.ParentRelation;
+                //stuobj.Category.CategoryId= studentAndparent.Category; 
+                //stuobj.Group.GroupId= _wonder.Groups.Where(x => x.GroupId == studentAndparent.Group.GroupId).Select(x => x.GroupId).FirstOrDefault(); 
 
                 stuobj.ParentFirstName = studentAndparent.student.ParentFirstName;
                 stuobj.ParentLastName = studentAndparent.student.ParentLastName;
@@ -116,26 +118,18 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         public ActionResult StudentsData()
         {
 
-            List<Student> data = new List<Student>();
+            List<StudentAndParent> data = new List<StudentAndParent>();
             var obj = _wonder.Students.Select(x => x).ToList();
             foreach (var item in obj)
             {
-                //StudentAndParent O = new StudentAndParent();
-                //O.student.StudentId = item.StudentId;   
-                //O.student.BirthDate = item.BirthDate;
-                //O.student.Phone = item.Phone;
-                //O.student.Nationality = item.Nationality;
-                //O.student.Gender = item.Gender;
-                //O.StudentFirstName = item.FirstName + " " + item.LastName; //full name not first name
-                //if (item.Category != null)
-                //{
-                //    O.student.Category.CategoryName = item.Category.CategoryName;
-                //}
-                //if (item.Group != null)
-                //{
-                //    O.student.Group.GroupName = item.Group.GroupName;
-                //}
-                data.Add(item);
+                StudentAndParent O = new StudentAndParent();
+                O.student = item;
+
+                O.StudentName = item.FirstName + " " + item.LastName; //full name not first name
+                O.GroupName = _wonder.Groups.Where(x => x.GroupId == item.GroupId).Select(x => x.GroupName).FirstOrDefault();
+                O.CategoryName = _wonder.Categories.Where(x => x.CategoryId == item.CategoryId).Select(x => x.CategoryName).FirstOrDefault();
+
+                data.Add(O);
             }
             return Json(data);
         }

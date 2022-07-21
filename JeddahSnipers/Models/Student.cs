@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,7 +14,7 @@ namespace JeddahSnipers.Models
     {
         [Key]
         public int StudentId { get; set; }
-        [Required(AllowEmptyStrings =false,ErrorMessage ="This Field Can't be less than 2 characters")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "This Field Can't be less than 2 characters")]
         [StringLength(50, MinimumLength = 2)]
         public string FirstName { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "This Field Can't be less than 2 characters")]
@@ -51,7 +54,9 @@ namespace JeddahSnipers.Models
         [Phone]
         public string ParentEmergencyPhone { get; set; }
         public Category Category { get; set; }
+        public int? CategoryId { get; set; }
         public Group Group { get; set; }
+        public int? GroupId { get; set; }
         public List<Attendance> Attendance { get; set; }
     }
 }
