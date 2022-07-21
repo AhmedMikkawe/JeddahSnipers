@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewData["Title"] = "AddNewGroup";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+          <div class="container-fluid">
+            <div class="row mb-2 mt-2">
+              <div class="col-12">
+                <h1 class="m-0 text-dark h5">أضف معلومات المجموعة</h1>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-12">
+                <form role="form">
+                  <div class="row mt-2">
+                    <div class="col-12">
+                      <!-- general form elements -->
+                      <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title">معلومات المجموعة</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class="form-group">
+                                <label for="">اسم المجموعة</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id=""
+                                  placeholder=""
+                                />
+                              </div>
+                            </div>
+                            <div class="col-12">
+                              <div class="form-group">
+                                <label for="">التصنيف</label>
+                                <select class="form-control" id="">
+                                  <option>اختر تصنيف</option>
+                                  <option value="">مقيم</option>
+                                  <option value="">سعودي</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-12">
+                              <div class="form-group">
+                                <label for="">العمر</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id=""
+                                  placeholder=""
+                                />
+                              </div>
+                            </div>
+                            <div class="col-12">
+                              <p class="font-weight-bold">أيام التدريب</p>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  id="inlineCheckbox1"
+                                  value="option1"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="inlineCheckbox1"
+                                  >السبت</label
+                                >
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  id="inlineCheckbox2"
+                                  value="option1"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="inlineCheckbox2"
+                                  >الأحد</label
+                                >
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  id="inlineCheckbox3"
+                                  value="option1"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="inlineCheckbox3"
+                                  >الاثنين</label
+                                >
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  id="inlineCheckbox4"
+                                  value="option1"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="inlineCheckbox4"
+                                  >الثلاثاء</label
+                                >
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  id="inlineCheckbox5"
+                                  value="option1"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="inlineCheckbox5"
+                                  >الأربعاء</label
+                                >
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  id="inlineCheckbox6"
+                                  value="option1"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="inlineCheckbox6"
+                                  >الخميس</label
+                                >
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  id="inlineCheckbox7"
+                                  value="option1"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="inlineCheckbox7"
+                                  >الجمعة</label
+                                >
+                              </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                <label for="">من</label>
+                                <input type="time" class="form-control" id="" />
+                              </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                              <div class="form-group">
+                                <label for="">إلى</label>
+                                <input type="time" class="form-control" id="" />
+                              </div>
+                            </div>
+                            <div class="col-12">
+                              <div class="form-group">
+                                <label for="">اسم المدرب</label>
+                                <select class="form-control" id="">
+                                  <option>اختر مدرب</option>
+                                  <option value="">مقيم</option>
+                                  <option value="">سعودي</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-3 mx-auto">
+                    <button
+                      type="submit"
+                      class="btn btn-block btn-primary mb-2"
+                    >
+                      حفظ
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </section>

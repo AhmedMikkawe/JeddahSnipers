@@ -1,0 +1,349 @@
+﻿@model JeddahSnipers.ViewModels.StudentAndParent
+
+@{
+    ViewData["Title"] = "AddNewStudent";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <form role="form" method="post" asp-action="AddNewStudent" enctype="multipart/form-data">
+            <div class="row mt-2">
+                <div class="col-12 col-md-6">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">بيانات الطالب</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <!--put image here-->
+                                </div>
+                                <!----------------------------------------- نضيف تصنيف و مجموعه (هنجيبهم بفور ايتش من الداتابيز ------------------------------------->
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentFirstName">الاسم الاول</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="StudentFirstName"
+                                               id="StudentFirstName"
+                                               placeholder="الاسم الاول"/>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentLastName">اسم العائلة</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="StudentLastName"
+                                               id="StudentLastName"
+                                               placeholder="اسم العائلة"/>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentBirthDate">تاريخ الميلاد</label>
+                                        <input type="date"
+                                               class="form-control"
+                                               id="StudentBirthDate"
+                                               name="StudentBirthDate"/>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentNationality">الجنسية</label>
+                                        <select class="form-control" id="StudentNationality"name="StudentNationality" >
+                                            <option value="">اختر الجنسية</option>
+                                            <option value="مقيم">مقيم</option>
+                                            <option value="سعودي">سعودي</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                @*<div class="col-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="nationalId">رقم الهوية</label>
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          id="nationalId"
+                                               asp-for="StudentId"
+                                        />
+                                      </div>
+                                    </div>*@
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentPhone">رقم الجوال</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="StudentPhone"
+                                               name="StudentPhone" />
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentNationalIDFile">رفع هوية الطالب</label>
+                                        <input type="file"
+                                               class="form-control-file"
+                                               id="StudentNationalIDFile"
+                                               name="StudentNationalIDFile" />
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentApplicationFile">رفع النموذج</label>
+                                        <input type="file"
+                                               class="form-control-file"
+                                               id="StudentApplicationFile"
+                                               name="StudentApplicationFile" />
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="StudentAddress">العنوان</label>
+                                        <textarea class="form-control"
+                                                  id="StudentAddress"
+                                                  rows="3"
+                                                  name="StudentAddress"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentPassword">كلمة المرور</label>
+                                        <input type="password"
+                                               class="form-control"
+                                               id="StudentPassword"
+                                               placeholder="كلمة المرور"
+                                               name="StudentPassword" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">معلومات ولي الأمر</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="ParentFirstName">الاسم الاول</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="ParentFirstName"
+                                               placeholder="الاسم الاول"
+                                               name="ParentFirstName" />
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="ParentLastName">اسم العائلة</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="ParentLastName"
+                                               placeholder="اسم العائلة"
+                                               name="ParentLastName" />
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="ParentPhone">رقم الجوال</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="ParentPhone"
+                                               name="ParentPhone" />
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="ParentEmergencyPhone">رقم الجوال للطوارئ</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="ParentEmergencyPhone"
+                                               name="ParentEmergencyPhone" />
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="Parentrelation">ولي الأمر</label>
+                                        <select class="form-control" id="Parentrelation" name="Parentrelation">
+                                            <option value="">صلة القرابة</option>
+                                            <option value="اخ">اخ</option>
+                                            <option value="اخت">اخت</option>
+                                            <option value="والد">والد</option>
+                                            <option value="والدة">والدة</option>
+                                            <option value="اخرى">اخرى</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">الحالة البدنية</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentGender">الجنس</label>
+                                        <select class="form-control" id="StudentGender" name="StudentGender">
+                                            <option value="ذكر">ذكر</option>
+                                            <option value="أنثى">أنثى</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentWeight">الوزن</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="StudentWeight"
+                                               placeholder="الوزن"
+                                               name="StudentWeight" />
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentHeight">الطول</label>
+                                        <input type="text" class="form-control" id="StudentHeight" name="StudentHeight" />
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentBloodType">فصيلة الدم</label>
+                                        <select class="form-control" id="StudentBloodType" name="StudentBloodType">
+                                            <option value="">حدد فصيلة الدم</option>
+                                            <option value="A-">A-</option>
+                                            <option value="A+">A+</option>
+                                            <option value="AB">AB</option>
+                                            <option value="B+">B+</option>
+                                            <option value="O+">O+</option>
+                                            <option value="O-">O-</option>
+                                            <option value="B-">B-</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentFavoriteFoot">القدم المفضلة</label>
+                                        <select class="form-control" id="StudentFavoriteFoot" name="StudentFavoriteFoot">
+                                            <option value="">حدد القدم المفضلة</option>
+                                            <option value="اليمنى">اليمنى</option>
+                                            <option value="اليسرى">اليسرى</option>
+                                            <option value="">الاثنين</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentPowerOfSight">النظر</label>
+                                        <select class="form-control" id="StudentPowerOfSight" name="StudentPowerOfSight">
+                                            <option value="">قوة النظر</option>
+                                            <option value="جيدة">جيدة</option>
+                                            <option value="يحتاج نظارة">يحتاج نظارة</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentAllergicTo">حساسية من</label>
+                                        <input type="text" class="form-control" id="StudentAllergicTo" name="StudentAllergicTo" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p class="font-weight-bold">نقص فيتامين</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="radio"
+                                                       name="StudentVitaminDeficiency"
+                                                       id="StudentVitaminDeficiency"
+                                                       value="True" name="StudentVitaminDeficiency" />
+                                                <label class="form-check-label"
+                                                       for="vitlacknessyes">نعم</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="radio"
+                                                       name="StudentVitaminDeficiency"
+                                                       id="StudentVitaminDeficiency"
+                                                       value="False" name="StudentVitaminDeficiency" />
+                                                <label class="form-check-label"
+                                                       for="vitlacknessno">لا</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p class="font-weight-bold">
+                                                هل يعاني من أي مشاكل صحية
+                                            </p>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="radio"
+                                                       name="StudentHealthProblems"
+                                                       id="StudentHealthProblems"
+                                                       value="True" name="StudentHealthProblems" />
+                                                <label class="form-check-label"
+                                                       for="healthProblemsYes">نعم</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="radio"
+                                                       name="StudentHealthProblems"
+                                                       id="StudentHealthProblems"
+                                                       value="False" name="StudentHealthProblems" />
+                                                <label class="form-check-label"
+                                                       for="healthProblemsNo">لا</label>
+                                            </div>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   id="StudentHealthProblemsDesc" name="StudentHealthProblemsDesc" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mx-auto">
+                <button type="submit" class="btn btn-block btn-primary mb-2">
+                    حفظ
+                </button>
+            </div>
+        </form>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
