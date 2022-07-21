@@ -160,21 +160,25 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //اضف جديد
         public ActionResult AddNewGroup()
         {
-            return View();
+            AddNewGroupViewModel model = new AddNewGroupViewModel();
+            model.categories = _wonder.Categories.ToList();
+            model.coaches = _wonder.Coachs.ToList();
+            return View(model);
         }
         [HttpPost]
-        public ActionResult AddNewGroup(Group group)
+        public ActionResult AddNewGroup(AddNewGroupViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _wonder.Add(group);
+                _wonder.Groups.Add(model.group);
                 _wonder.SaveChanges();
                 return RedirectToAction("GroupsMenu");
             }
             else
             {
-
-            return View(group);
+                model.categories = _wonder.Categories.ToList();
+                model.coaches = _wonder.Coachs.ToList();
+                return View(model);
             }
         }
 

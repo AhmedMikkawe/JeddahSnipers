@@ -12,6 +12,8 @@ namespace JeddahSnipers.Models
         public int GroupId { get; set; }
         [Required]
         public string GroupName { get; set; }
+        [Range(4,80,ErrorMessage ="This age is out of range")]
+        public byte Age { get; set; }
         public bool Saturday { get; set; }
         public bool Sunday { get; set; }
         public bool Monday { get; set; }
@@ -26,7 +28,9 @@ namespace JeddahSnipers.Models
         [DataType(DataType.Time)]
         public TimeSpan EndTime { get; set; }
         public Category Category { get; set; }
+        public int? CategoryId { get; set; }
         public Coach Coach { get; set; }
+        public int? CoachId { get; set; }
         public List<Student> Student { get; set; }
     }
 }

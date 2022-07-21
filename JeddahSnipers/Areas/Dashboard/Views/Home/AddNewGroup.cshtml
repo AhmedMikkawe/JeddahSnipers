@@ -1,4 +1,4 @@
-﻿@model JeddahSnipers.Models.Group
+﻿@model JeddahSnipers.ViewModels.AddNewGroupViewModel
 
 @{
     ViewData["Title"] = "AddNewGroup";
@@ -31,39 +31,42 @@
                           <div class="row">
                             <div class="col-12">
                               <div class="form-group">
-                                <label for="">اسم المجموعة</label>
+                                <label for="group.GroupName">اسم المجموعة</label>
                                 <input
                                   type="text"
                                   class="form-control"
-                                   asp-for="GroupName"
+                                   asp-for="group.GroupName"
                                   placeholder=""
                                 />
-                                <span class="text-danger" asp-validation-for="GroupName"></span>
+                                <span class="text-danger" asp-validation-for="group.GroupName"></span>
                               </div>
                             </div>
                             <div class="col-12">
                               <div class="form-group">
                                 <label for="">التصنيف</label>
-                                <select class="form-control"  >
-                                    
-                                  <option>اختر تصنيف</option>
-                                  <option value="">مقيم</option>
-                                  <option value="">سعودي</option>
+                                <select class="form-control"  asp-for="group.CategoryId">
+                                       <option>اختر تصنيف</option>
+                                    @foreach (Category category in Model.categories)
+                                    {
+                                        <option value="@category.CategoryId">@category.CategoryName</option>
+                                    }
+                                                    
                                 </select>
-                               <span class="text-danger"></span>
+                               <span class="text-danger" asp-validation-for="group.CategoryId"></span>
 
                               </div>
                             </div>
                             <div class="col-12">
                               <div class="form-group">
-                                <label for="">العمر</label>
+                                <label for="group.Age">العمر</label>
                                 <input
                                   type="text"
                                   class="form-control"
                                   placeholder=""
+                                  asp-for="group.Age"
                              
                                 />
-                                <span class="text-danger" ></span>
+                                <span class="text-danger" asp-validation-for="group.Age" ></span>
 
                               </div>
                             </div>
@@ -73,11 +76,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  asp-for="Saturday"
+                                  asp-for="group.Saturday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="Saturday"
+                                  for="group_Saturday"
                                   >السبت</label
                                 >
                               </div>
@@ -85,11 +88,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  asp-for="Sunday"
+                                  asp-for="group.Sunday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="Sunday"
+                                  for="group_Sunday"
                                   >الأحد</label
                                 >
                               </div>
@@ -97,11 +100,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  asp-for="Monday"
+                                  asp-for="group.Monday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="Monday"
+                                  for="group_Monday"
                                   >الاثنين</label
                                 >
                               </div>
@@ -109,12 +112,12 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  asp-for="Tuesday"
+                                  asp-for="group.Tuesday"
 
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="Tuesday"
+                                  for="group_Tuesday"
                                   >الثلاثاء</label
                                 >
                               </div>
@@ -122,11 +125,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  asp-for="Wednesday"
+                                  asp-for="group.Wednesday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="Wednesday"
+                                  for="group_Wednesday"
                                   >الأربعاء</label
                                 >
                               </div>
@@ -134,11 +137,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  asp-for="Thursday"
+                                  asp-for="group.Thursday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="Thursday"
+                                  for="group_Thursday"
                                   >الخميس</label
                                 >
                               </div>
@@ -146,11 +149,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  asp-for="Friday"
+                                  asp-for="group.Friday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="Friday"
+                                  for="group_Friday"
                                   >الجمعة</label
                                 >
                               </div>
@@ -158,28 +161,32 @@
                             <div class="col-12 col-md-6">
                               <div class="form-group">
                                 <label for="">من</label>
-                                <input type="time" class="form-control" asp-for="StartTime" />
-                                <span class="text-danger" asp-validation-for="StartTime"></span>
+                                <input type="time" class="form-control" asp-for="group.StartTime" />
+                                <span class="text-danger" asp-validation-for="group.StartTime"></span>
 
                               </div>
                             </div>
                             <div class="col-12 col-md-6">
                               <div class="form-group">
                                 <label for="">إلى</label>
-                                <input type="time" class="form-control" asp-for="EndTime" />
-                                <span class="text-danger" asp-validation-for="EndTime"></span>
+                                <input type="time" class="form-control" asp-for="group.EndTime" />
+                                <span class="text-danger" asp-validation-for="group.EndTime"></span>
 
                               </div>
                             </div>
                             <div class="col-12">
                               <div class="form-group">
                                 <label for="">اسم المدرب</label>
-                                <select class="form-control" id="">
+                                <select class="form-control" asp-for="group.CoachId">
                                   <option>اختر مدرب</option>
-                                  <option value="">مقيم</option>
-                                  <option value="">سعودي</option>
+                                  @foreach (var coach in Model.coaches)
+                                 {
+                                     
+                                  <option value="@coach.CoachId">@coach.FirstName &nbsp; @coach.LastName</option>
+                                 }
+                                  
                                 </select>
-                               <span class="text-danger"></span>
+                               <span class="text-danger" asp-validation-for="group.CoachId"></span>
 
                               </div>
                             </div>
