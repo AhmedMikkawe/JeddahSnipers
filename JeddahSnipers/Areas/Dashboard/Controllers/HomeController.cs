@@ -162,6 +162,22 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult AddNewGroup(Group group)
+        {
+            if (ModelState.IsValid)
+            {
+                _wonder.Add(group);
+                _wonder.SaveChanges();
+                return RedirectToAction("GroupsMenu");
+            }
+            else
+            {
+
+            return View(group);
+            }
+        }
+
         //قائمة المجموعات
         public ActionResult GroupsMenu()
         {

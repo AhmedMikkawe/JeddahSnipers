@@ -1,4 +1,5 @@
-﻿
+﻿@model JeddahSnipers.Models.Group
+
 @{
     ViewData["Title"] = "AddNewGroup";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
@@ -13,9 +14,11 @@
             </div>
             <div class="row mt-2">
               <div class="col-12">
-                <form role="form">
+
+                <form role="form" asp-area="Dashboard" asp-action="AddNewGroup" asp-controller="Home">
                   <div class="row mt-2">
                     <div class="col-12">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                       <!-- general form elements -->
                       <div class="card card-primary">
                         <div class="card-header">
@@ -32,19 +35,23 @@
                                 <input
                                   type="text"
                                   class="form-control"
-                                  id=""
+                                   asp-for="GroupName"
                                   placeholder=""
                                 />
+                                <span class="text-danger" asp-validation-for="GroupName"></span>
                               </div>
                             </div>
                             <div class="col-12">
                               <div class="form-group">
                                 <label for="">التصنيف</label>
-                                <select class="form-control" id="">
+                                <select class="form-control"  >
+                                    
                                   <option>اختر تصنيف</option>
                                   <option value="">مقيم</option>
                                   <option value="">سعودي</option>
                                 </select>
+                               <span class="text-danger"></span>
+
                               </div>
                             </div>
                             <div class="col-12">
@@ -53,9 +60,11 @@
                                 <input
                                   type="text"
                                   class="form-control"
-                                  id=""
                                   placeholder=""
+                             
                                 />
+                                <span class="text-danger" ></span>
+
                               </div>
                             </div>
                             <div class="col-12">
@@ -64,12 +73,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  id="inlineCheckbox1"
-                                  value="option1"
+                                  asp-for="Saturday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="inlineCheckbox1"
+                                  for="Saturday"
                                   >السبت</label
                                 >
                               </div>
@@ -77,12 +85,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  id="inlineCheckbox2"
-                                  value="option1"
+                                  asp-for="Sunday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="inlineCheckbox2"
+                                  for="Sunday"
                                   >الأحد</label
                                 >
                               </div>
@@ -90,12 +97,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  id="inlineCheckbox3"
-                                  value="option1"
+                                  asp-for="Monday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="inlineCheckbox3"
+                                  for="Monday"
                                   >الاثنين</label
                                 >
                               </div>
@@ -103,12 +109,12 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  id="inlineCheckbox4"
-                                  value="option1"
+                                  asp-for="Tuesday"
+
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="inlineCheckbox4"
+                                  for="Tuesday"
                                   >الثلاثاء</label
                                 >
                               </div>
@@ -116,12 +122,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  id="inlineCheckbox5"
-                                  value="option1"
+                                  asp-for="Wednesday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="inlineCheckbox5"
+                                  for="Wednesday"
                                   >الأربعاء</label
                                 >
                               </div>
@@ -129,12 +134,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  id="inlineCheckbox6"
-                                  value="option1"
+                                  asp-for="Thursday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="inlineCheckbox6"
+                                  for="Thursday"
                                   >الخميس</label
                                 >
                               </div>
@@ -142,12 +146,11 @@
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  id="inlineCheckbox7"
-                                  value="option1"
+                                  asp-for="Friday"
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="inlineCheckbox7"
+                                  for="Friday"
                                   >الجمعة</label
                                 >
                               </div>
@@ -155,13 +158,17 @@
                             <div class="col-12 col-md-6">
                               <div class="form-group">
                                 <label for="">من</label>
-                                <input type="time" class="form-control" id="" />
+                                <input type="time" class="form-control" asp-for="StartTime" />
+                                <span class="text-danger" asp-validation-for="StartTime"></span>
+
                               </div>
                             </div>
                             <div class="col-12 col-md-6">
                               <div class="form-group">
                                 <label for="">إلى</label>
-                                <input type="time" class="form-control" id="" />
+                                <input type="time" class="form-control" asp-for="EndTime" />
+                                <span class="text-danger" asp-validation-for="EndTime"></span>
+
                               </div>
                             </div>
                             <div class="col-12">
@@ -172,6 +179,8 @@
                                   <option value="">مقيم</option>
                                   <option value="">سعودي</option>
                                 </select>
+                               <span class="text-danger"></span>
+
                               </div>
                             </div>
                           </div>
