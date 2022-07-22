@@ -47,6 +47,38 @@
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
+                                        <label for="StudentNationality">التصنيف</label>
+                                        <select class="form-control" asp-for="student.CategoryId" >
+                                                  <option>التصنيف</option>
+
+                                               @foreach (var category in Model.categories)
+                                              {
+                                                  <option value="@category.CategoryId">@category.CategoryName</option>
+                                              }
+                                        </select>
+                                        <span asp-validation-for="student.CategoryId" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentNationality">مجموعة</label>
+                                        <select class="form-control" asp-for="student.GroupId" >
+                                            <option >اختر مجموعة</option>
+                                            @foreach (var group in Model.groups)
+                                           {
+                                            <option value="@group.GroupId">@group.GroupName</option>
+                                               
+                                           }
+                                            
+                                        </select>
+                                        <span asp-validation-for="student.GroupId" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
                                         <label for="StudentBirthDate">تاريخ الميلاد</label>
                                         <input type="date"
                                                class="form-control"
@@ -103,8 +135,8 @@
                                         <label for="StudentApplicationFile">رفع النموذج</label>
                                         <input type="file"
                                                class="form-control-file"
-                                               asp-for="student.ApplicationFile" />
-                                               <span asp-validation-for="student.ApplicationFile" class="text-danger"></span>
+                                               asp-for="StudentApplicationFile" />
+                                               <span asp-validation-for="StudentApplicationFile" class="text-danger"></span>
                                     </div>
                                 </div>
 
