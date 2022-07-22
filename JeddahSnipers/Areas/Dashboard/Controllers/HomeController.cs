@@ -295,7 +295,74 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //قائمة المجموعات
         public ActionResult GroupsMenu()
         {
-            return View();
+            GroupListViewModel g = new GroupListViewModel();
+            g.coaches= _wonder.Coachs.Select(x => x).ToList();
+            return View(g);
+        }
+        public ActionResult getGroups()
+        {
+            List<GroupListViewModel> data = new List<GroupListViewModel>();
+            var obj = _wonder.Groups.Select(x => x).ToList();
+            foreach (var item in obj)
+            {
+                GroupListViewModel O = new GroupListViewModel();
+                O.group = item;
+                O.studentsNumber = _wonder.Students.Where(x => x.GroupId == item.GroupId).Count();
+                O.time = "From " + _wonder.Groups.Where(x => x.GroupId == item.GroupId).Select(x => x.StartTime).FirstOrDefault() + " To " + _wonder.Groups.Where(x => x.GroupId == item.GroupId).Select(x => x.EndTime).FirstOrDefault();
+                O.coachName = _wonder.Coachs.Where(x => x.CoachId == item.CoachId).Select(x => x.FirstName).FirstOrDefault() + "  " + _wonder.Coachs.Where(x => x.CoachId == item.CoachId).Select(x => x.LastName).FirstOrDefault();
+                if (item.Saturday == true)
+                {
+                    O.days += " Saturday ";
+                }
+                if (item.Sunday == true)
+                {
+                    O.days += " Sunday ";
+                }
+                if (item.Monday == true)
+                {
+                    O.days += " Monday ";
+                }
+                if (item.Tuesday == true)
+                {
+                    O.days += " Tuesday ";
+                }
+                if (item.Wednesday == true)
+                {
+                    O.days += " Wednesday ";
+                }
+                if (item.Thursday == true)
+                {
+                    O.days += " Thursday ";
+                }
+                if (item.Friday == true)
+                {
+                    O.days += " Friday ";
+                }
+                data.Add(O);
+            }
+            return Json(data);
+        }
+        public ActionResult DeleteGroup(int id)
+        {
+            var groupRow = _wonder.Groups.Where(x => x.GroupId == id).FirstOrDefault();
+
+            if (groupRow != null)
+            {
+                _wonder.Groups.Remove(groupRow);
+                _wonder.SaveChanges();
+                return Json("Deleted Done");
+            }
+            else
+            {
+                return Json("Error");
+            }
+        }
+        public IActionResult UpdateGroup(int id)
+        {
+            var group = _wonder.Groups.Where(x => x.GroupId == id).FirstOrDefault();
+            ViewBag.coaches = _wonder.Coachs.Select(x => x).ToList();
+            ViewBag.categories = _wonder.Categories.Select(x => x).ToList();
+            return View(group);
         }
         #endregion
 
