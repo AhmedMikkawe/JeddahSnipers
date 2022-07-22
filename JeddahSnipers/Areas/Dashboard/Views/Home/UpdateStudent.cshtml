@@ -160,11 +160,6 @@
                                         <span asp-validation-for="Password" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6" style="font-size: 14px; display: grid; vertical-align: super; color: #959393;">
-                                    <label> كلمة المرور القديمه</label>
-                                    <span>@Model.Password</span>
-
-                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -397,3 +392,8 @@
     <!-- /.container-fluid -->
 </section>
 
+@section scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
