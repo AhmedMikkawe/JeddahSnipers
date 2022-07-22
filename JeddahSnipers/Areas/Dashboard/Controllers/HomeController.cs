@@ -251,17 +251,48 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             return Json(model);
         }
         [HttpPost]
-        public ActionResult CategoryList(CategoryListViewModel model)
+        public ActionResult CategoryList(Category model)
         {
             if (ModelState.IsValid)
             {
-                _wonder.Categories.Add(model.category);
+                _wonder.Categories.Add(model);
                 _wonder.SaveChanges();
                 return RedirectToAction("CategoryList");
 
             }
-            model.categories = _wonder.Categories.ToList();
-            return View(model);
+            List<Category> model2 = _wonder.Categories.ToList();
+            return View(model2);
+        }
+        public ActionResult DeleteCategory(int id)
+        {
+            var categoryRow = _wonder.Categories.Where(x => x.CategoryId == id).FirstOrDefault();
+
+            if (categoryRow != null)
+            {
+                _wonder.Categories.Remove(categoryRow);
+                _wonder.SaveChanges();
+                return Json("Deleted Done");
+            }
+            else
+            {
+                return Json("Error");
+            }
+        }
+        
+        [HttpPost]
+        public IActionResult UpdateCategory(Category cat)
+        {
+            if (ModelState.IsValid)
+            {
+                _wonder.Entry(cat).State = EntityState.Modified;
+                _wonder.SaveChanges();
+                return RedirectToAction("CategoryList");
+            }
+            else
+            {
+                return RedirectToAction("CategoryList");
+            }
+
         }
         #endregion
 
@@ -364,6 +395,22 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             ViewBag.categories = _wonder.Categories.Select(x => x).ToList();
             return View(group);
         }
+        [HttpPost]
+        public IActionResult UpdateGroup(Group group)
+        {
+            if (ModelState.IsValid)
+            {
+                _wonder.Entry(group).State = EntityState.Modified;
+                _wonder.SaveChanges();
+                return RedirectToAction("GroupsMenu");
+            }
+            else
+            {
+                return RedirectToAction("UpdateGroup", group.GroupId);
+            }
+
+        }
+
         #endregion
 
 
@@ -425,6 +472,45 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             }
 
             return Json(coaches);
+        }
+        
+        public ActionResult DeleteCoach(int CoachId)
+        {
+            var coachRow = _wonder.Coachs.Where(x => x.CoachId == CoachId).FirstOrDefault();
+
+            if (coachRow != null)
+            {
+                _wonder.Coachs.Remove(coachRow);
+                _wonder.SaveChanges();
+                return Json("Deleted Done");
+            }
+            else
+            {
+                return Json("Error");
+            }
+        }
+        public IActionResult UpdateCoach(int id)
+        {
+            var coach = _wonder.Coachs.Where(x => x.CoachId == id).FirstOrDefault();
+            return View(coach);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateCoach(Coach coach)
+        {
+            if (ModelState.IsValid)
+            {
+                _wonder.Entry(coach).State = EntityState.Modified;
+                _wonder.SaveChanges();
+                return RedirectToAction("CoachsMenu");
+            }
+            else
+            {
+                return RedirectToAction("UpdateCoach", coach.CoachId);
+            }
+
+
+
         }
         #endregion
 

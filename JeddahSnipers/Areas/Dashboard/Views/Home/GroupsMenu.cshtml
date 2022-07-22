@@ -7,6 +7,7 @@
 
 <head>
     <link href="/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 </head>
 
 <section class="content">
@@ -96,14 +97,16 @@
                         action: function () {
                             $.ajax({
                                 type: "GET",
-                                url: "/Dashboard/Home/DeleteGroup?id=" + groupid,
+                                url: "/Dashboard/Home/DeleteGroup/" + groupid,
                                 dataType: "json",
                                 success: function (result) {
                                     if (result == "Deleted Done") {
+                                        debugger;
                                         $.alert('تم حذف المجموعه بنجاح ' );
                                         location.reload();
                                     }
                                     else if (result == "Error") {
+                                        debugger;
                                         $.alert('حدث خطأ اثناء عملية الحذف , حاول مره اخري');
                                     }
                                 }
