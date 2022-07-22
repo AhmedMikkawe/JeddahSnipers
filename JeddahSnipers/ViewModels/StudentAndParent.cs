@@ -17,6 +17,10 @@ namespace JeddahSnipers.ViewModels
         public string CategoryName { get; set; }
         public Group Group { get; set; }
         public string GroupName { get; set; }
+        public IEnumerable<Category> categories { get; set; }
+        public IEnumerable<Group> groups { get; set; }
+
         public IFormFile StudentNationalIDFile { get; set; }
+        public IFormFile StudentApplicationFile { get; set; }
     }
 }

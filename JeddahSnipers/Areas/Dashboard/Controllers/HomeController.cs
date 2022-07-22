@@ -32,11 +32,16 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //اضف جديد
         public ActionResult AddNewStudent()
         {
-            return View();
+            StudentAndParent model = new StudentAndParent();
+            model.categories = _wonder.Categories.ToList();
+            model.groups = _wonder.Groups.ToList();
+            return View(model);
+            
         }
         [HttpPost]
         public ActionResult AddNewStudent(StudentAndParent studentAndparent)
         {
+            /*
             if (ModelState.IsValid)
             {
                 Student stuobj = new Student();
@@ -76,7 +81,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 stuobj.HealthProblemsDesc = studentAndparent.student.HealthProblemsDesc;
                 stuobj.Nationality = studentAndparent.student.Nationality;
                 stuobj.ParentRelation = studentAndparent.student.ParentRelation;
-                //stuobj.Category.CategoryId= studentAndparent.Category; 
+                stuobj.Category = studentAndparent.groups;
                 //stuobj.Group.GroupId= _wonder.Groups.Where(x => x.GroupId == studentAndparent.Group.GroupId).Select(x => x.GroupId).FirstOrDefault(); 
 
                 stuobj.ParentFirstName = studentAndparent.student.ParentFirstName;
@@ -91,7 +96,43 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
             }
             return View(studentAndparent);
-
+            */
+            if (ModelState.IsValid)
+            {
+                string stdNIdFileName = string.Empty;
+                string stdAppFileName = string.Empty;
+                if (studentAndparent.StudentNationalIDFile != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString();
+                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                    stdNIdFileName = studentAndparent.StudentNationalIDFile.FileName;
+                    string fullPath = Path.Combine(uploads, stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName));
+                    studentAndparent.StudentNationalIDFile.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    stdNIdFileName = stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName);
+                    studentAndparent.student.NationalIDFile = stdNIdFileName;
+                }
+                if (studentAndparent.StudentApplicationFile != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString();
+                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                    stdAppFileName = studentAndparent.StudentApplicationFile.FileName;
+                    string fullPath = Path.Combine(uploads, stdAppFileName + newfileName + Path.GetExtension(stdAppFileName));
+                    studentAndparent.StudentNationalIDFile.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    stdAppFileName = stdAppFileName + newfileName + Path.GetExtension(stdAppFileName);
+                    studentAndparent.student.ApplicationFile = stdAppFileName;
+                }
+                _wonder.Students.Add(studentAndparent.student);
+                _wonder.SaveChanges();
+                return RedirectToAction("StudentMenu");
+            }
+            else
+            {
+                studentAndparent.categories = _wonder.Categories.ToList();
+                studentAndparent.groups = _wonder.Groups.ToList();
+                return View(studentAndparent);
+            }
             //var filePath = Path.Combine(_hostingEnv.WebRootPath, "Images");
             //if (Photo_1 != null)
             //{
@@ -143,9 +184,28 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
         #region تصنيف المشتركين
         //قائمة المشتركين
-        public ActionResult SubscriberList()
+        public ActionResult CategoryList()
         {
             return View();
+        }
+        public ActionResult getCategories()
+        {
+            CategoryListViewModel model = new CategoryListViewModel();
+            model.categories = _wonder.Categories.ToList();
+            return Json(model);
+        }
+        [HttpPost]
+        public ActionResult CategoryList(CategoryListViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _wonder.Categories.Add(model.category);
+                _wonder.SaveChanges();
+                return RedirectToAction("CategoryList");
+
+            }
+            model.categories = _wonder.Categories.ToList();
+            return View(model);
         }
         #endregion
 
