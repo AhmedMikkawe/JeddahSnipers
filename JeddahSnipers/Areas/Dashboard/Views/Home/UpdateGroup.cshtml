@@ -1,0 +1,172 @@
+﻿@model JeddahSnipers.Models.Group
+
+@{
+    ViewData["Title"] = "UpdateGroup";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+    var Categories = ViewBag.categories;
+    var Coaches = ViewBag.coaches;
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row mb-2 mt-2">
+            <div class="col-12">
+                <h1 class="m-0 text-dark h5">أضف معلومات المجموعة</h1>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+
+                <form role="form" asp-area="Dashboard" asp-action="AddNewGroup" asp-controller="Home">
+                    <input hidden asp-for="GroupId" />
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <!-- general form elements -->
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">معلومات المجموعة</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="group.GroupName">اسم المجموعة</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       asp-for="GroupName"
+                                                       placeholder="" />
+                                                <span class="text-danger" asp-validation-for="GroupName"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="">التصنيف</label>
+                                                <select class="form-control" asp-for="CategoryId">
+                                                    <option>اختر تصنيف</option>
+                                                    @foreach (Category category in Categories)
+                                                    {
+                                                        <option value="@category.CategoryId">@category.CategoryName</option>
+                                                    }
+
+                                                </select>
+                                                <span class="text-danger" asp-validation-for="CategoryId"></span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="group.Age">العمر</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       placeholder=""
+                                                       asp-for="Age" />
+                                                <span class="text-danger" asp-validation-for="Age"></span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <p class="font-weight-bold">أيام التدريب</p>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       asp-for="Saturday" />
+                                                <label class="form-check-label"
+                                                       for="group_Saturday">السبت</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       asp-for="Sunday" />
+                                                <label class="form-check-label"
+                                                       for="group_Sunday">الأحد</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       asp-for="Monday" />
+                                                <label class="form-check-label"
+                                                       for="group_Monday">الاثنين</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       asp-for="Tuesday" />
+                                                <label class="form-check-label"
+                                                       for="group_Tuesday">الثلاثاء</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       asp-for="Wednesday" />
+                                                <label class="form-check-label"
+                                                       for="group_Wednesday">الأربعاء</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       asp-for="Thursday" />
+                                                <label class="form-check-label"
+                                                       for="group_Thursday">الخميس</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       asp-for="Friday" />
+                                                <label class="form-check-label"
+                                                       for="group_Friday">الجمعة</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="">من</label>
+                                                <input type="time" class="form-control" asp-for="StartTime" />
+                                                <span class="text-danger" asp-validation-for="StartTime"></span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="">إلى</label>
+                                                <input type="time" class="form-control" asp-for="EndTime" />
+                                                <span class="text-danger" asp-validation-for="EndTime"></span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="">اسم المدرب</label>
+                                                <select class="form-control" asp-for="CoachId">
+                                                    <option>اختر مدرب</option>
+                                                    @foreach (var coach in Coaches)
+                                                    {
+
+                                                        <option value="@coach.CoachId">@coach.FirstName &nbsp; @coach.LastName</option>
+                                                    }
+
+                                                </select>
+                                                <span class="text-danger" asp-validation-for="CoachId"></span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 mx-auto">
+                        <button type="submit"
+                                class="btn btn-block btn-primary mb-2">
+                            حفظ
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>

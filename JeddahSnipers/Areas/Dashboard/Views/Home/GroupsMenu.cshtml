@@ -1,8 +1,127 @@
-﻿
+﻿@model JeddahSnipers.ViewModels.GroupListViewModel
+
 @{
     ViewData["Title"] = "GroupsMenu";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
 }
 
-<h1>GroupsMenu</h1>
+<head>
+    <link href="/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+</head>
 
+<section class="content">
+    <div class="container-fluid">
+        <div class="row mb-2 mt-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark h5">قائمة المجموعات</h1>
+            </div>
+
+        </div>
+        <div class="row mt-2">
+            <!-- table here -->
+            <div class="col-12 mt-2">
+                <table id="groupList" class="table table-striped table-bordered">
+                </table>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+@section scripts{
+    <script src="/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" integrity="sha512-CryKbMe7sjSCDPl18jtJI5DR5jtkUWxPXWaLCst6QjH8wxDexfRJic2WRmRXmstr2Y8SxDDWuBO6CQC6IE4KTA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Dashboard/Home/getGroups",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccess,
+                failure: function (response) {
+                    console.log(response);
+                    alert(response.d);
+                },
+                error: function (response) {
+                    alert(response.d);
+                    console.log(response);
+                }
+            });
+        });
+        function OnSuccess(response) {
+            $(".spinner-border").css("display", "none");
+            $("#groupList").DataTable(
+                {
+                    bLengthChange: true,
+                    lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                    bFilter: true,
+                    bSort: true,
+                    bPaginate: true,
+                    data: response,
+                    columns: [{ title: 'مجموعه', 'data': 'group.groupName', className: 'vertical' },
+                    { title: 'العمر', 'data': 'group.age', className: 'vertical' },
+                    { title: 'عدد الطلاب', 'data': 'studentsNumber', className: 'vertical' },
+                    { title: 'ايام التدريب', 'data': 'days', className: 'vertical' },
+                    { title: 'الوقت', 'data': 'time', className: 'vertical' },
+                    { title: 'اسم المدرب', 'data': 'coachName', className: 'vertical' },
+                    {
+
+                        title: 'تنفيذ', orderable: false, data: null, defaultContent: '', className: 'vertical',
+                        "render": function (data, type, full, meta) {
+                            return '<a onclick="Update(' + full.group.groupId  + ')"  style="cursor:pointer;"><i style="color:darkblue; font-size:large;" class="fas fa-edit"></i></a> &nbsp; <a onclick="Delete(' + full.group.groupId + ')" style="cursor:pointer;"><i style="color:red; font-size:large;" class="fas fa-trash-alt"></i></a>';
+                        }
+                    }]
+                });
+
+        };
+        function Delete(groupid) {
+            debugger;
+            $.confirm({
+                title: 'هل انت متأكد من حذف هذه المجموعه؟',
+                content: 'في حالة حذف هذه المجموعه لن تستطيع استرجاعها مره اخرى',
+                autoClose: 'cancelAction|8000',
+                buttons: {
+                    deleteUser: {
+                        text: 'حذف المجموعه',
+                        action: function () {
+                            $.ajax({
+                                type: "GET",
+                                url: "/Dashboard/Home/DeleteGroup?id=" + groupid,
+                                dataType: "json",
+                                success: function (result) {
+                                    if (result == "Deleted Done") {
+                                        $.alert('تم حذف المجموعه بنجاح ' );
+                                        location.reload();
+                                    }
+                                    else if (result == "Error") {
+                                        $.alert('حدث خطأ اثناء عملية الحذف , حاول مره اخري');
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    cancelAction: {
+                        text: 'إلغاء التنفيذ',
+                        action: function () {
+                            $.alert('تم الرجوع عن حذف المجموعه');
+                        }
+                    }
+
+                }
+            });
+        }
+        function Update(groupid) {
+            window.location = "/Dashboard/Home/UpdateGroup/" + groupid;
+        }
+    </script>
+}
