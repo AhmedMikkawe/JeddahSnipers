@@ -102,6 +102,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             {
                 string stdNIdFileName = string.Empty;
                 string stdAppFileName = string.Empty;
+                string imageFileName = string.Empty;
                 if (studentAndparent.StudentNationalIDFile != null)
                 {
                     Guid guid = Guid.NewGuid();
@@ -124,6 +125,18 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                     stdAppFileName = stdAppFileName + newfileName + Path.GetExtension(stdAppFileName);
                     studentAndparent.student.ApplicationFile = stdAppFileName;
                 }
+                if (studentAndparent.studentImage != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString();
+                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                    imageFileName = studentAndparent.studentImage.FileName;
+                    string fullPath = Path.Combine(uploads, imageFileName + newfileName + Path.GetExtension(imageFileName));
+                    studentAndparent.studentImage.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    imageFileName = imageFileName + newfileName + Path.GetExtension(imageFileName);
+                    studentAndparent.student.Image = imageFileName;
+                }
+
                 _wonder.Students.Add(studentAndparent.student);
                 _wonder.SaveChanges();
                 return RedirectToAction("StudentMenu");
@@ -293,10 +306,58 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult AddNewCoach(AddNewCoachViewModel model) {
+            if (ModelState.IsValid)
+            {
+                string cvFileName = string.Empty;
+                string imageFileName = string.Empty;
+                if (model.CV != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString();
+                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                    cvFileName = model.CV.FileName;
+                    string fullPath = Path.Combine(uploads, cvFileName + newfileName + Path.GetExtension(cvFileName));
+                    model.CV.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    cvFileName = cvFileName + newfileName + Path.GetExtension(cvFileName);
+                    model.coach.CVFile = cvFileName;
+                }
+                if (model.Image != null) {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString();
+                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                    imageFileName = model.Image.FileName;
+                    string fullPath = Path.Combine(uploads, imageFileName + newfileName + Path.GetExtension(imageFileName));
+                    model.Image.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    imageFileName = imageFileName + newfileName + Path.GetExtension(imageFileName);
+                    model.coach.Image = imageFileName;
+                }
+                _wonder.Coachs.Add(model.coach);
+                _wonder.SaveChanges();
+                return RedirectToAction("CoachsMenu");
+            }
+            else
+            {
+                return View(model);
+            }
+
+        }
         //قائمة المدربين
         public ActionResult CoachsMenu()
         {
             return View();
+        }
+        public ActionResult getCoaches()
+        {
+            
+            var coaches = _wonder.Coachs.ToList();
+            foreach (var item in coaches)
+            {
+                item.FirstName = item.FirstName + " " + item.LastName; //full name not first name
+            }
+
+            return Json(coaches);
         }
         #endregion
 

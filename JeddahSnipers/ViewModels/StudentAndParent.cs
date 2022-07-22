@@ -21,6 +21,8 @@ namespace JeddahSnipers.ViewModels
         public IEnumerable<Group> groups { get; set; }
 
         public IFormFile StudentNationalIDFile { get; set; }
+        public IFormFile studentImage { get; set; }
+
         public IFormFile StudentApplicationFile { get; set; }
     }
 }

@@ -21,9 +21,13 @@
 
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-12">
-                                    <!--put image here-->
+                                <div class="col-12 mx-auto">
+                                    <div class="border rounded">
+                                        <img class="img-thumbnail" src="~/uploads/default-user.png" alt="" id="studentImage" />
+                                       <input class="form-control-file" asp-for="studentImage" type="file" accept="image/*" id="Image"/>
+                                     </div>
                                 </div>
+
                                 <!----------------------------------------- نضيف تصنيف و مجموعه (هنجيبهم بفور ايتش من الداتابيز ------------------------------------->
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">

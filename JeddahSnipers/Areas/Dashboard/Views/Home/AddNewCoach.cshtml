@@ -1,13 +1,123 @@
-﻿
+﻿@model JeddahSnipers.ViewModels.AddNewCoachViewModel
 @{
     ViewData["Title"] = "AddNewCoach";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
 }
 
-<h1>AddNewCoach</h1>
+
+<section class="content">
+    <div class="container-fluid">
+        <form role="form" method="post" asp-action="AddNewCoach" enctype="multipart/form-data">
+            <div class="row mt-2">
+                <div class="col-12">
+                    <div class="text-danger" asp-validation-summary="ModelOnly" ></div>
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">بيانات المدرب</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-3 mx-auto">
+                                    <div class="border rounded">
+                                        <img class="img-thumbnail" src="~/uploads/default-user.png" alt="" id="coachImage" />
+                                       <input class="form-control-file" asp-for="Image" type="file" accept="image/*" id="Image"/>
+                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!----------------------------------------- نضيف تصنيف و مجموعه (هنجيبهم بفور ايتش من الداتابيز ------------------------------------->
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="FirstName">الاسم الاول</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               asp-for="coach.FirstName"                                               
+                                                placeholder="الاسم الاول"/>
+                                               <span asp-validation-for="coach.FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentLastName">اسم العائلة</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               asp-for="coach.LastName"
+                                               placeholder="اسم العائلة"/>
+                                               <span asp-validation-for="coach.LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                             
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="coach.BirthDate">تاريخ الميلاد</label>
+                                        <input type="date"
+                                               class="form-control"
+                                               asp-for="coach.BirthDate"/>
+                                         <span asp-validation-for="coach.BirthDate" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="coach.Nationality">الجنسية</label>
+                                        <select class="form-control" asp-for="coach.Nationality" >
+                                            <option value="">اختر الجنسية</option>
+                                            <option value="مقيم">مقيم</option>
+                                            <option value="سعودي">سعودي</option>
+                                        </select>
+                                        <span asp-validation-for="coach.Nationality" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                @*<div class="col-12 col-md-6">
+                                      <div class="form-group">
+                                        <label for="nationalId">رقم الهوية</label>
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          id="nationalId"
+                                               asp-for="StudentId"
+                                        />
+                                      </div>
+                                    </div>*@
+                             
+                            
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StudentApplicationFile">رفع السيرة الذاتية</label>
+                                        <input type="file"
+                                               class="form-control-file"
+                                               asp-for="CV" />
+                                               <span asp-validation-for="CV" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mx-auto">
+                <button type="submit" class="btn btn-block btn-primary mb-2">
+                    حفظ
+                </button>
+            </div>
+        </form>
+    </div>
+    <!-- /.container-fluid -->
+</section>
 
 @section scripts{
     @{
-        <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
     }
+   <script>
+
+        
+    
+   </script>
 }
