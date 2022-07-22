@@ -8,6 +8,7 @@ using JeddahSnipers.Models;
 using JeddahSnipers.Data;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace JeddahSnipers.Areas.Dashboard.Controllers
 {
@@ -76,7 +77,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 stuobj.HealthProblemsDesc = studentAndparent.student.HealthProblemsDesc;
                 stuobj.Nationality = studentAndparent.student.Nationality;
                 stuobj.ParentRelation = studentAndparent.student.ParentRelation;
-                //stuobj.Category.CategoryId= studentAndparent.Category; 
+                //stuobj.CategoryId= studentAndparent.CategoryId; 
                 //stuobj.Group.GroupId= _wonder.Groups.Where(x => x.GroupId == studentAndparent.Group.GroupId).Select(x => x.GroupId).FirstOrDefault(); 
 
                 stuobj.ParentFirstName = studentAndparent.student.ParentFirstName;
@@ -133,6 +134,48 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             }
             return Json(data);
         }
+        public ActionResult DeleteStudent(int StudentId)
+        {
+            var studentRow = _wonder.Students.Where(x => x.StudentId == StudentId).FirstOrDefault();
+
+            if (studentRow != null)
+            {
+                _wonder.Students.Remove(studentRow);
+                _wonder.SaveChanges();
+                return Json("Deleted Done");
+            }
+            else
+            {
+                return Json("Error");
+            }
+        }
+        public IActionResult UpdateStudent(int id)
+        {
+            var student = _wonder.Students.Where(x => x.StudentId == id).FirstOrDefault();
+            ViewBag.Categories = _wonder.Categories.ToList();
+            ViewBag.Groups = _wonder.Groups.ToList();
+            return View(student);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateStudent(Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                //Student Edit = _wonder.Students.Where(x => x.StudentId == student.StudentId).FirstOrDefault();
+                _wonder.Entry(student).State = EntityState.Modified;
+                _wonder.SaveChanges();
+                return RedirectToAction("StudentMenu");
+            }
+            else
+            {
+                return RedirectToAction("UpdateStudent", student.StudentId);
+            }
+            
+            
+
+        }
+
         //الحضور اليومي
         public ActionResult DailyAttendance()
         {
