@@ -9,6 +9,7 @@ using JeddahSnipers.Data;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace JeddahSnipers.Areas.Dashboard.Controllers
 {
@@ -28,11 +29,46 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             return View();
         }
 
+        #region تسجيل الدخول والخروج 
+        public IActionResult Login()
+        {
+            return View();
+        }
+        public ActionResult EnterAccount(Admin admin)
+        {
+            if (_wonder.Admins.Where(x => x.Email == admin.Email).FirstOrDefault() != null)
+            {
+                if (_wonder.Admins.Where(x => x.Email == admin.Email && x.Password == admin.Password).FirstOrDefault() != null)
+                {
+                    var id = _wonder.Admins.Where(x => x.Email == admin.Email).Select(x => x.Id).FirstOrDefault();
+                    HttpContext.Session.SetInt32("AdminID", id);
+                    HttpContext.Session.SetString("AdminName", _wonder.Admins.Where(x => x.Id == id).Select(x => x.FullName).FirstOrDefault());
+                    return Json("return to index");
+                }
+                else
+                {
+                    return Json("wrong password");
+                }
+            }
+            else
+                return Json("this email isn't exist");
+        }
+
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Remove("AdminID");
+            return RedirectToAction("Login");
+        }
+        #endregion
 
         #region الطلاب
         //اضف جديد
         public ActionResult AddNewStudent()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             StudentAndParent model = new StudentAndParent();
             model.categories = _wonder.Categories.ToList();
             model.groups = _wonder.Groups.ToList();
@@ -168,6 +204,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //قائمة الطلاب
         public ActionResult StudentMenu()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
         public ActionResult StudentsData()
@@ -205,6 +245,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public IActionResult UpdateStudent(int id)
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             var student = _wonder.Students.Where(x => x.StudentId == id).FirstOrDefault();
             ViewBag.Categories = _wonder.Categories.ToList();
             ViewBag.Groups = _wonder.Groups.ToList();
@@ -233,6 +277,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //الحضور اليومي
         public ActionResult DailyAttendance()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
         #endregion
@@ -242,6 +290,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //قائمة المشتركين
         public ActionResult CategoryList()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
         public ActionResult getCategories()
@@ -301,6 +353,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //اضف جديد
         public ActionResult AddNewGroup()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             AddNewGroupViewModel model = new AddNewGroupViewModel();
             model.categories = _wonder.Categories.ToList();
             model.coaches = _wonder.Coachs.ToList();
@@ -326,6 +382,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //قائمة المجموعات
         public ActionResult GroupsMenu()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             GroupListViewModel g = new GroupListViewModel();
             g.coaches= _wonder.Coachs.Select(x => x).ToList();
             return View(g);
@@ -390,6 +450,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public IActionResult UpdateGroup(int id)
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             var group = _wonder.Groups.Where(x => x.GroupId == id).FirstOrDefault();
             ViewBag.coaches = _wonder.Coachs.Select(x => x).ToList();
             ViewBag.categories = _wonder.Categories.Select(x => x).ToList();
@@ -418,6 +482,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //اضف جديد
         public ActionResult AddNewCoach()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
         [HttpPost]
@@ -460,6 +528,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //قائمة المدربين
         public ActionResult CoachsMenu()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
         public ActionResult getCoaches()
@@ -491,6 +563,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public IActionResult UpdateCoach(int id)
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             var coach = _wonder.Coachs.Where(x => x.CoachId == id).FirstOrDefault();
             return View(coach);
         }
