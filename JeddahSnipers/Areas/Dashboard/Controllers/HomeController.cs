@@ -26,12 +26,20 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public IActionResult Index()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
 
         #region الادمن
         public ActionResult UpdateAdminProfile()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
             int adminId = HttpContext.Session.GetInt32("AdminID").GetValueOrDefault();
             return View(_wonder.Admins.Where(x=>x.Id ==adminId).FirstOrDefault());
         }
@@ -238,7 +246,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public ActionResult StudentsData()
         {
-
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return Json("Unauthorized");
+            }
             List<StudentAndParent> data = new List<StudentAndParent>();
             var obj = _wonder.Students.Select(x => x).ToList();
             foreach (var item in obj)
@@ -334,6 +345,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         #endregion
         public ActionResult getAttendances()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return Json("Unauthorized");
+            }
             List<AttendanceViewModel> att = new List<AttendanceViewModel>();
             var attendances = _wonder.Attendances.ToList();
             foreach (var item in attendances)
@@ -392,6 +407,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public ActionResult getCategories()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return Json("Unauthorized");
+            }
             CategoryListViewModel model = new CategoryListViewModel();
             model.categories = _wonder.Categories.ToList();
             return Json(model);
@@ -486,6 +505,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public ActionResult getGroups()
         {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return Json("Unauthorized");
+            }
             List<GroupListViewModel> data = new List<GroupListViewModel>();
             var obj = _wonder.Groups.Select(x => x).ToList();
             foreach (var item in obj)
@@ -632,7 +655,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public ActionResult getCoaches()
         {
-
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return Json("Unauthorized");
+            }
             var coaches = _wonder.Coachs.ToList();
             foreach (var item in coaches)
             {
@@ -683,6 +709,96 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
 
 
+        }
+        #endregion
+
+
+        #region المصروفات
+        public ActionResult AddExpense()
+        {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddExpense(Expense expense)
+        {
+            if (ModelState.IsValid)
+            {
+                Expense ex = new Expense();
+                ex.Amount = expense.Amount;
+                ex.Description = expense.Description;
+                ex.ResponsibleParty = expense.ResponsibleParty;
+                ex.Date = Convert.ToDateTime(DateTime.UtcNow.ToString("D"));
+                _wonder.Expenses.Add(ex);
+                _wonder.SaveChanges();
+                return RedirectToAction("ExpenseList");
+            }
+
+            return View(expense);
+        }
+        public ActionResult UpdateExpense(int id)
+        {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
+            Expense expense = _wonder.Expenses.Where(x => x.ExpenseId == id).SingleOrDefault();
+            if(expense == null)
+            {
+                return NotFound();
+            }
+            return View(expense);
+        }
+        [HttpPost]
+        public ActionResult UpdateExpense(Expense exp)
+        {
+            if (ModelState.IsValid)
+            {
+                _wonder.Entry(exp).State = EntityState.Modified;
+                _wonder.SaveChanges();
+                Expense expense = _wonder.Expenses.Where(x => x.ExpenseId == exp.ExpenseId).SingleOrDefault();
+                expense.Date = Convert.ToDateTime(DateTime.UtcNow.ToString("D"));
+                _wonder.Expenses.Update(expense);
+                _wonder.SaveChanges();
+                return RedirectToAction("ExpenseList");
+
+            }
+            return View(exp);
+        }
+        public ActionResult ExpenseList()
+        {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return RedirectToAction("Login");
+            }
+            return View();
+        }
+        public ActionResult GetExpenseList()
+        {
+            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            {
+                return Json("Unauthorized");
+            }
+            var exp = _wonder.Expenses.ToList();
+            return Json(exp);
+        }
+        public ActionResult DeleteExpense(int id)
+        {
+            var exp = _wonder.Expenses.Where(x => x.ExpenseId == id).FirstOrDefault();
+
+            if (exp != null)
+            {
+                _wonder.Expenses.Remove(exp);
+                _wonder.SaveChanges();
+                return Json("Deleted Done");
+            }
+            else
+            {
+                return Json("Error");
+            }
         }
         #endregion
 

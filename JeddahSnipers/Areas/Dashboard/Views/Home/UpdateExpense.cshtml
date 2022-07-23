@@ -1,0 +1,76 @@
+﻿@model JeddahSnipers.Models.Expense
+
+@{
+    ViewData["Title"] = "Update Expense";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <form role="form" method="post" asp-action="UpdateExpense" enctype="multipart/form-data">
+            <div class="row mt-2">
+                <div class="col-12 col-md-6">
+                    <div class="text-danger" asp-validation-summary="ModelOnly" ></div>
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">المبلغ</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <input hidden asp-for="ExpenseId"/>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="Amount">المبلغ</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               asp-for="Amount"                                               
+                                                placeholder=""/>
+                                               <span asp-validation-for="Amount" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="Description">الوصف</label>
+                                        <textarea class="form-control"
+                                                  rows="3"
+                                                  asp-for="Description"></textarea>
+                                                  <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="ResponsibleParty">تم الصرف بواسطة</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder=""
+                                               asp-for="ResponsibleParty" />
+                                               <span asp-validation-for="ResponsibleParty" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+    
+            </div>
+            <div class="col-12 col-md-3 mx-auto">
+                <button type="submit" class="btn btn-block btn-primary mb-2">
+                    حفظ
+                </button>
+            </div>
+        </form>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+@section scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
