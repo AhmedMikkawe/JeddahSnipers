@@ -303,7 +303,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             {
                 return RedirectToAction("Login");
             }
-            return View();
+            
             AttendanceViewModel model = new AttendanceViewModel();
             model.students = _wonder.Students.ToList();
             model.attendanceDate =  DateTime.UtcNow.ToString("D");
