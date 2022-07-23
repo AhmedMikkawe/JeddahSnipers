@@ -4,13 +4,58 @@
     ViewData["Title"] = "AddNewStudent";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .container {
+        position: relative;
+        min-width: 170px;
+        max-width: 200px;
+    }
+
+    .image {
+        object-fit: cover;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 140px;
+        min-height: 140px;
+    }
+
+    .overlay {
+        border-radius: 5px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        width: 83%;
+        min-width: 170px;
+        max-width: 190px;
+        opacity: 0;
+        transition: .3s ease;
+        background-color: #00000078;
+    }
+
+    .container:hover .overlay {
+        opacity: 1;
+    }
+
+    .icon {
+        font-size: 100px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+        cursor: pointer;
+    }
+</style>
 
 <section class="content">
     <div class="container-fluid">
         <form role="form" method="post" asp-action="AddNewStudent" enctype="multipart/form-data">
             <div class="row mt-2">
                 <div class="col-12 col-md-6">
-                    <div class="text-danger" asp-validation-summary="ModelOnly" ></div>
+                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
@@ -21,22 +66,30 @@
 
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-12 mx-auto">
-                                    <div class="border rounded">
-                                        <img class="img-thumbnail" src="~/uploads/default-user.png" alt="" id="studentImage" />
-                                       <input class="form-control-file" asp-for="studentImage" type="file" accept="image/*" id="Image"/>
-                                     </div>
-                                </div>
+                                <div class="col-12" style=" margin-bottom: 15px; ">
+                                    <div>
+                                        <div style="display:flex">
+                                            <div class="container">
+                                                <img id="img" src="~/img/defaultUser1.jfif" class="image img-responsive img-thumbnail">
+                                                <div class="overlay">
+                                                    <label for="image"><i class="fa fa-plus icon"></i></label>
+                                                    <input type="file" name="studentImage" id="image" style="display:none;visibility:none;" onchange="getImage(this.files[0]);" />
+                                                </div>
+                                            </div>
 
+                                        </div>
+                                    </div>
+                                </div>
+                               
                                 <!----------------------------------------- نضيف تصنيف و مجموعه (هنجيبهم بفور ايتش من الداتابيز ------------------------------------->
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentFirstName">الاسم الاول</label>
                                         <input type="text"
                                                class="form-control"
-                                               asp-for="student.FirstName"                                               
-                                                placeholder="الاسم الاول"/>
-                                               <span asp-validation-for="student.FirstName" class="text-danger"></span>
+                                               asp-for="student.FirstName"
+                                               placeholder="الاسم الاول" />
+                                        <span asp-validation-for="student.FirstName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -45,20 +98,20 @@
                                         <input type="text"
                                                class="form-control"
                                                asp-for="student.LastName"
-                                               placeholder="اسم العائلة"/>
-                                               <span asp-validation-for="student.LastName" class="text-danger"></span>
+                                               placeholder="اسم العائلة" />
+                                        <span asp-validation-for="student.LastName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentNationality">التصنيف</label>
-                                        <select class="form-control" asp-for="student.CategoryId" >
-                                                  <option>التصنيف</option>
+                                        <select class="form-control" asp-for="student.CategoryId">
+                                            <option>التصنيف</option>
 
-                                               @foreach (var category in Model.categories)
-                                              {
-                                                  <option value="@category.CategoryId">@category.CategoryName</option>
-                                              }
+                                            @foreach (var category in Model.categories)
+                                            {
+                                                <option value="@category.CategoryId">@category.CategoryName</option>
+                                            }
                                         </select>
                                         <span asp-validation-for="student.CategoryId" class="text-danger"></span>
 
@@ -67,14 +120,14 @@
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentNationality">مجموعة</label>
-                                        <select class="form-control" asp-for="student.GroupId" >
-                                            <option >اختر مجموعة</option>
+                                        <select class="form-control" asp-for="student.GroupId">
+                                            <option>اختر مجموعة</option>
                                             @foreach (var group in Model.groups)
-                                           {
-                                            <option value="@group.GroupId">@group.GroupName</option>
-                                               
-                                           }
-                                            
+                                            {
+                                                <option value="@group.GroupId">@group.GroupName</option>
+
+                                            }
+
                                         </select>
                                         <span asp-validation-for="student.GroupId" class="text-danger"></span>
 
@@ -86,15 +139,15 @@
                                         <label for="StudentBirthDate">تاريخ الميلاد</label>
                                         <input type="date"
                                                class="form-control"
-                                               asp-for="student.BirthDate"/>
-                                         <span asp-validation-for="student.BirthDate" class="text-danger"></span>
+                                               asp-for="student.BirthDate" />
+                                        <span asp-validation-for="student.BirthDate" class="text-danger"></span>
 
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentNationality">الجنسية</label>
-                                        <select class="form-control" asp-for="student.Nationality" >
+                                        <select class="form-control" asp-for="student.Nationality">
                                             <option value="">اختر الجنسية</option>
                                             <option value="مقيم">مقيم</option>
                                             <option value="سعودي">سعودي</option>
@@ -119,9 +172,8 @@
                                         <label for="StudentPhone">رقم الجوال</label>
                                         <input type="text"
                                                class="form-control"
-                                               asp-for="student.Phone"
-                                                />
-                                               <span asp-validation-for="student.Phone" class="text-danger"></span>
+                                               asp-for="student.Phone" />
+                                        <span asp-validation-for="student.Phone" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -129,9 +181,8 @@
                                         <label for="StudentNationalIDFile">رفع هوية الطالب</label>
                                         <input type="file"
                                                class="form-control-file"
-                                               
                                                asp-for="StudentNationalIDFile" />
-                                               <span asp-validation-for="StudentNationalIDFile" class="text-danger"></span>
+                                        <span asp-validation-for="StudentNationalIDFile" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -140,7 +191,7 @@
                                         <input type="file"
                                                class="form-control-file"
                                                asp-for="StudentApplicationFile" />
-                                               <span asp-validation-for="StudentApplicationFile" class="text-danger"></span>
+                                        <span asp-validation-for="StudentApplicationFile" class="text-danger"></span>
                                     </div>
                                 </div>
 
@@ -150,7 +201,7 @@
                                         <textarea class="form-control"
                                                   rows="3"
                                                   asp-for="student.Address"></textarea>
-                                                  <span asp-validation-for="student.Address" class="text-danger"></span>
+                                        <span asp-validation-for="student.Address" class="text-danger"></span>
                                     </div>
                                 </div>
 
@@ -161,7 +212,7 @@
                                                class="form-control"
                                                placeholder="كلمة المرور"
                                                asp-for="student.Password" />
-                                               <span asp-validation-for="student.Password" class="text-danger"></span>
+                                        <span asp-validation-for="student.Password" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +237,7 @@
                                                class="form-control"
                                                placeholder="الاسم الاول"
                                                asp-for="student.ParentFirstName" />
-                                               <span asp-validation-for="student.ParentFirstName" class="text-danger"></span>
+                                        <span asp-validation-for="student.ParentFirstName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -196,7 +247,7 @@
                                                class="form-control"
                                                placeholder="اسم العائلة"
                                                asp-for="student.ParentLastName" />
-                                               <span asp-validation-for="student.ParentLastName" class="text-danger"></span>
+                                        <span asp-validation-for="student.ParentLastName" class="text-danger"></span>
 
                                     </div>
                                 </div>
@@ -207,7 +258,7 @@
                                         <input type="text"
                                                class="form-control"
                                                asp-for="student.ParentPhone" />
-                                               <span asp-validation-for="student.ParentPhone" class="text-danger"></span>
+                                        <span asp-validation-for="student.ParentPhone" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -216,13 +267,13 @@
                                         <input type="text"
                                                class="form-control"
                                                asp-for="student.ParentEmergencyPhone" />
-                                               <span asp-validation-for="student.ParentEmergencyPhone" class="text-danger"></span>
+                                        <span asp-validation-for="student.ParentEmergencyPhone" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="Parentrelation">ولي الأمر</label>
-                                        <select class="form-control"  asp-for="student.ParentRelation">
+                                        <select class="form-control" asp-for="student.ParentRelation">
                                             <option value="">صلة القرابة</option>
                                             <option value="اخ">اخ</option>
                                             <option value="اخت">اخت</option>
@@ -265,7 +316,7 @@
                                                class="form-control"
                                                placeholder="الوزن"
                                                asp-for="student.Weight" />
-                                               <span asp-validation-for="student.Weight" class="text-danger"></span>
+                                        <span asp-validation-for="student.Weight" class="text-danger"></span>
                                     </div>
                                 </div>
 
@@ -331,20 +382,19 @@
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input"
                                                        type="radio"
-                                                      
                                                        value="True" asp-for="student.VitaminDeficiency" />
                                                 <label class="form-check-label"
                                                        for="vitlacknessyes">نعم</label>
-                                                       <span asp-validation-for="student.VitaminDeficiency" class="text-danger"></span>
+                                                <span asp-validation-for="student.VitaminDeficiency" class="text-danger"></span>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input"
                                                        type="radio"
                                                        asp-for="student.VitaminDeficiency"
-                                                       value="False"  />
+                                                       value="False" />
                                                 <label class="form-check-label"
                                                        for="vitlacknessno">لا</label>
-                                                       <span asp-validation-for="student.VitaminDeficiency" class="text-danger"></span>
+                                                <span asp-validation-for="student.VitaminDeficiency" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -363,7 +413,7 @@
                                                        value="True" asp-for="student.HealthProblems" />
                                                 <label class="form-check-label"
                                                        for="healthProblemsYes">نعم</label>
-                                                       <span asp-validation-for="student.HealthProblems" class="text-danger"></span>
+                                                <span asp-validation-for="student.HealthProblems" class="text-danger"></span>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input"
@@ -371,13 +421,13 @@
                                                        value="False" asp-for="student.HealthProblems" />
                                                 <label class="form-check-label"
                                                        for="healthProblemsNo">لا</label>
-                                                       <span asp-validation-for="student.HealthProblems" class="text-danger"></span>
+                                                <span asp-validation-for="student.HealthProblems" class="text-danger"></span>
 
                                             </div>
                                             <input type="text"
                                                    class="form-control"
-                                                    asp-for="student.HealthProblemsDesc" />
-                                                   <span asp-validation-for="student.HealthProblemsDesc" class="text-danger"></span>
+                                                   asp-for="student.HealthProblemsDesc" />
+                                            <span asp-validation-for="student.HealthProblemsDesc" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -396,7 +446,19 @@
     </div>
     <!-- /.container-fluid -->
 </section>
-
+<script>
+    function getImage(imagevalue) {
+        debugger;
+        if (imagevalue) {
+            let reader = new FileReader();
+            reader.onload = function (event) {
+                $('#icon').remove();
+                $('#img').attr("src", event.target.result);
+            };
+            reader.readAsDataURL(imagevalue);
+        }
+    }
+</script>
 @section scripts{
     @{
         <partial name="_ValidationScriptsPartial" />

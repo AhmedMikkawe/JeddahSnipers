@@ -4,13 +4,58 @@
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .container {
+        position: relative;
+        min-width: 170px;
+        max-width: 200px;
+    }
+
+    .image {
+        object-fit: cover;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 140px;
+        min-height: 140px;
+    }
+
+    .overlay {
+        border-radius: 5px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        width: 83%;
+        min-width: 170px;
+        max-width: 190px;
+        opacity: 0;
+        transition: .3s ease;
+        background-color: #00000078;
+    }
+
+    .container:hover .overlay {
+        opacity: 1;
+    }
+
+    .icon {
+        font-size: 100px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+        cursor: pointer;
+    }
+</style>
 
 <section class="content">
     <div class="container-fluid">
         <form role="form" method="post" asp-action="AddNewCoach" enctype="multipart/form-data">
             <div class="row mt-2">
                 <div class="col-12">
-                    <div class="text-danger" asp-validation-summary="ModelOnly" ></div>
+                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                     <!-- general form elements -->
                     <div class="card card-primary">
                         <div class="card-header">
@@ -21,12 +66,21 @@
 
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-12 col-md-3 mx-auto">
-                                    <div class="border rounded">
-                                        <img class="img-thumbnail" src="~/uploads/default-user.png" alt="" id="coachImage" />
-                                       <input class="form-control-file" asp-for="Image" type="file" accept="image/*" id="Image"/>
-                                     </div>
+                                <div class="col-12" style=" margin-bottom: 15px; ">
+                                    <div>
+                                        <div style="display:flex">
+                                            <div class="container">
+                                                <img id="img" src="~/img/defaultUser2.jfif" class="image img-responsive img-thumbnail">
+                                                <div class="overlay">
+                                                    <label for="image"><i class="fa fa-plus icon"></i></label>
+                                                    <input type="file" name="Image" id="image" style="display:none;visibility:none;" onchange="getImage(this.files[0]);" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                             <div class="row">
                                 <!----------------------------------------- نضيف تصنيف و مجموعه (هنجيبهم بفور ايتش من الداتابيز ------------------------------------->
@@ -35,9 +89,9 @@
                                         <label for="FirstName">الاسم الاول</label>
                                         <input type="text"
                                                class="form-control"
-                                               asp-for="coach.FirstName"                                               
-                                                placeholder="الاسم الاول"/>
-                                               <span asp-validation-for="coach.FirstName" class="text-danger"></span>
+                                               asp-for="coach.FirstName"
+                                               placeholder="الاسم الاول" />
+                                        <span asp-validation-for="coach.FirstName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -46,22 +100,22 @@
                                         <input type="text"
                                                class="form-control"
                                                asp-for="coach.LastName"
-                                               placeholder="اسم العائلة"/>
-                                               <span asp-validation-for="coach.LastName" class="text-danger"></span>
+                                               placeholder="اسم العائلة" />
+                                        <span asp-validation-for="coach.LastName" class="text-danger"></span>
                                     </div>
                                 </div>
-                             
+
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="coach.BirthDate">تاريخ الميلاد</label>
                                         <input type="date"
                                                class="form-control"
-                                               asp-for="coach.BirthDate"/>
-                                         <span asp-validation-for="coach.BirthDate" class="text-danger"></span>
+                                               asp-for="coach.BirthDate" />
+                                        <span asp-validation-for="coach.BirthDate" class="text-danger"></span>
 
                                     </div>
                                 </div>
-                                    <div class="col-12 col-md-6">
+                                <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="Gender">الجنس</label>
                                         <select class="form-control" asp-for="coach.Gender">
@@ -75,7 +129,7 @@
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="coach.Nationality">الجنسية</label>
-                                        <select class="form-control" asp-for="coach.Nationality" >
+                                        <select class="form-control" asp-for="coach.Nationality">
                                             <option value="">اختر الجنسية</option>
                                             <option value="مقيم">مقيم</option>
                                             <option value="سعودي">سعودي</option>
@@ -95,15 +149,15 @@
                                         />
                                       </div>
                                     </div>*@
-                             
-                            
+
+
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentApplicationFile">رفع السيرة الذاتية</label>
                                         <input type="file"
                                                class="form-control-file"
                                                asp-for="CV" />
-                                               <span asp-validation-for="CV" class="text-danger"></span>
+                                        <span asp-validation-for="CV" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -121,14 +175,27 @@
     </div>
     <!-- /.container-fluid -->
 </section>
+<script>
+    function getImage(imagevalue) {
+        debugger;
+        if (imagevalue) {
+            let reader = new FileReader();
+            reader.onload = function (event) {
+                $('#icon').remove();
+                $('#img').attr("src", event.target.result);
+            };
+            reader.readAsDataURL(imagevalue);
+        }
+    }
+</script>
 
 @section scripts{
     @{
-    <partial name="_ValidationScriptsPartial" />
+        <partial name="_ValidationScriptsPartial" />
     }
-   <script>
+    <script>
 
-        
-    
-   </script>
+
+
+    </script>
 }

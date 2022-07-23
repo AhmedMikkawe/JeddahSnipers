@@ -3,7 +3,52 @@
 @{
     ViewData["Title"] = "AddNewStudent";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
-}                   
+}
+<style>
+    .container {
+        position: relative;
+        min-width: 170px;
+        max-width: 200px;
+    }
+
+    .image {
+        object-fit: cover;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 140px;
+        min-height: 140px;
+    }
+
+    .overlay {
+        border-radius: 5px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        width: 83%;
+        min-width: 170px;
+        max-width: 190px;
+        opacity: 0;
+        transition: .3s ease;
+        background-color: #00000078;
+    }
+
+    .container:hover .overlay {
+        opacity: 1;
+    }
+
+    .icon {
+        font-size: 100px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+        cursor: pointer;
+    }
+</style>
 
 <section class="content">
     <div class="container-fluid">
@@ -21,21 +66,29 @@
 
                         <div class="card-body">
                             <div class="row">
-                                  <div class="col-12 mx-auto">
-                                    <div class="border rounded">
-                                        @if (Model.student.Image != null)
-                                        {
-                                        <img class="img-thumbnail" src="~/uploads/@Model.student.Image" alt="" id="studentImage" />
-                                            
-                                        }
-                                        @if(Model.student.Image == null){
-                                         <img class="img-thumbnail" src="~/uploads/default-user.png" alt="" id="studentImage" />
+                                <div class="col-12" style=" margin-bottom: 15px; ">
+                                    <div>
+                                        <div style="display:flex">
+                                            <div class="container">
+                                                @if (Model.student.Image != null)
+                                                {
+                                                    <img id="img" src="~/uploads/@Model.student.Image" class="image img-responsive img-thumbnail">
+                                                }
+                                                else
+                                                {
+                                                    <img id="img" src="~/img/defaultUser1.jfif" class="image img-responsive img-thumbnail">
+                                                }
+                                                <div class="overlay">
+                                                    <label for="image"><i class="fa fa-plus icon"></i></label>
 
-                                        }
+                                                    <input type="file" name="studentImage" id="image" style="display:none;visibility:none;" onchange="getImage(this.files[0]);" />
+                                                </div>
+                                            </div>
 
-                                       <input class="form-control-file" asp-for="studentImage" type="file" accept="image/*" id="Image"/>
-                                     </div>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <!----------------------------------------- نضيف تصنيف و مجموعه (هنجيبهم بفور ايتش من الداتابيز ------------------------------------->
                                 <div class="col-12 col-md-6">
                                     <input asp-for="student.StudentId" hidden />
@@ -67,7 +120,7 @@
                                             @foreach (var category in Model.categories)
                                             {
                                                 <option value="@category.CategoryId">@category.CategoryName</option>
-}
+                                            }
                                         </select>
                                         <span asp-validation-for="student.CategoryId" class="text-danger"></span>
 
@@ -81,7 +134,7 @@
                                             @foreach (var group in Model.groups)
                                             {
                                                 <option value="@group.GroupId">@group.GroupName</option>
-}
+                                            }
 
                                         </select>
                                         <span asp-validation-for="student.GroupId" class="text-danger"></span>
@@ -110,7 +163,7 @@
 
                                     </div>
                                 </div>
-                               
+
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="StudentPhone">رقم الجوال</label>
@@ -129,9 +182,9 @@
                                         <span asp-validation-for="NationalIDFile" class="text-danger"></span>
                                     </div>
                                     @if (Model.student.NationalIDFile != null)
-                                   {
-                                       <a href="~/uploads/@Model.student.NationalIDFile">Download</a>   
-                                   }
+                                    {
+                                        <a href="~/uploads/@Model.student.NationalIDFile">Download</a>
+                                    }
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
@@ -141,10 +194,10 @@
                                                asp-for="ApplicationFile" />
                                         <span asp-validation-for="ApplicationFile" class="text-danger"></span>
                                     </div>
-                                     @if (Model.student.ApplicationFile != null)
-                                   {
-                                       <a href="~/uploads/@Model.student.ApplicationFile">Download</a>   
-                                   }
+                                    @if (Model.student.ApplicationFile != null)
+                                    {
+                                        <a href="~/uploads/@Model.student.ApplicationFile">Download</a>
+                                    }
                                 </div>
 
                                 <div class="col-12">
@@ -399,6 +452,19 @@
     </div>
     <!-- /.container-fluid -->
 </section>
+<script>
+    function getImage(imagevalue) {
+        debugger;
+        if (imagevalue) {
+            let reader = new FileReader();
+            reader.onload = function (event) {
+                $('#icon').remove();
+                $('#img').attr("src", event.target.result);
+            };
+            reader.readAsDataURL(imagevalue);
+        }
+    }
+</script>
 
 @section scripts{
     @{
