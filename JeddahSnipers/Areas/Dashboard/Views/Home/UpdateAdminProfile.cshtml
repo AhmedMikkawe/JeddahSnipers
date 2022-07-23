@@ -1,0 +1,92 @@
+﻿@model JeddahSnipers.Models.Admin
+
+@{
+    ViewData["Title"] = "UpdateAdminProfile";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row mb-2 mt-2">
+            <div class="col-12">
+                <h1 class="m-0 text-dark h5">تعديل الملف الشخصي</h1>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+
+                <form role="form" asp-area="Dashboard" asp-action="UpdateAdminProfile" asp-controller="Home">
+                    <input hidden asp-for="Id" />
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <!-- general form elements -->
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">معلومات المجموعة</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="group.GroupName">الاسم كامل</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       asp-for="FullName"
+                                                       placeholder="" />
+                                                <span class="text-danger" asp-validation-for="FullName"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="group.Age">الجوال</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       placeholder=""
+                                                       asp-for="Phone" />
+                                                <span class="text-danger" asp-validation-for="Phone"></span>
+
+                                            </div>
+                                        </div><div class="col-12">
+                                            <div class="form-group">
+                                                <label for="group.Age">البريد الالكتروني</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       placeholder=""
+                                                       asp-for="Email" />
+                                                <span class="text-danger" asp-validation-for="Email"></span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="group.Age">كلمة السر</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       placeholder=""
+                                                       asp-for="Password" />
+                                                <span class="text-danger" asp-validation-for="Password"></span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 mx-auto">
+                        <button type="submit"
+                                class="btn btn-block btn-primary mb-2">
+                            حفظ
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>

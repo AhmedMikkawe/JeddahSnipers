@@ -29,6 +29,31 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             return View();
         }
 
+        #region الادمن
+        public ActionResult UpdateAdminProfile()
+        {
+            int adminId = HttpContext.Session.GetInt32("AdminID").GetValueOrDefault();
+            return View(_wonder.Admins.Where(x=>x.Id ==adminId).FirstOrDefault());
+        }
+        [HttpPost]
+
+        public ActionResult UpdateAdminProfile(Admin admin)
+        {
+            if (ModelState.IsValid)
+            {
+                _wonder.Entry(admin).State = EntityState.Modified;
+                _wonder.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("UpdateAdminProfile");
+            }
+
+        }
+
+        #endregion
+
         #region تسجيل الدخول والخروج 
         public IActionResult Login()
         {
@@ -59,6 +84,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             HttpContext.Session.Remove("AdminID");
             return RedirectToAction("Login");
         }
+
         #endregion
 
         #region الطلاب
@@ -73,7 +99,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             model.categories = _wonder.Categories.ToList();
             model.groups = _wonder.Groups.ToList();
             return View(model);
-            
+
         }
         [HttpPost]
         public ActionResult AddNewStudent(StudentAndParent studentAndparent)
@@ -260,7 +286,6 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Student Edit = _wonder.Students.Where(x => x.StudentId == student.StudentId).FirstOrDefault();
                 _wonder.Entry(student).State = EntityState.Modified;
                 _wonder.SaveChanges();
                 return RedirectToAction("StudentMenu");
@@ -269,9 +294,6 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             {
                 return RedirectToAction("UpdateStudent", student.StudentId);
             }
-            
-            
-
         }
 
         //الحضور اليومي
@@ -330,7 +352,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 return Json("Error");
             }
         }
-        
+
         [HttpPost]
         public IActionResult UpdateCategory(Category cat)
         {
@@ -387,7 +409,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 return RedirectToAction("Login");
             }
             GroupListViewModel g = new GroupListViewModel();
-            g.coaches= _wonder.Coachs.Select(x => x).ToList();
+            g.coaches = _wonder.Coachs.Select(x => x).ToList();
             return View(g);
         }
         public ActionResult getGroups()
@@ -489,7 +511,8 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult AddNewCoach(AddNewCoachViewModel model) {
+        public ActionResult AddNewCoach(AddNewCoachViewModel model)
+        {
             if (ModelState.IsValid)
             {
                 string cvFileName = string.Empty;
@@ -505,7 +528,8 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                     cvFileName = cvFileName + newfileName + Path.GetExtension(cvFileName);
                     model.coach.CVFile = cvFileName;
                 }
-                if (model.Image != null) {
+                if (model.Image != null)
+                {
                     Guid guid = Guid.NewGuid();
                     string newfileName = guid.ToString();
                     string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
@@ -536,7 +560,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
         public ActionResult getCoaches()
         {
-            
+
             var coaches = _wonder.Coachs.ToList();
             foreach (var item in coaches)
             {
@@ -545,7 +569,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
             return Json(coaches);
         }
-        
+
         public ActionResult DeleteCoach(int CoachId)
         {
             var coachRow = _wonder.Coachs.Where(x => x.CoachId == CoachId).FirstOrDefault();
