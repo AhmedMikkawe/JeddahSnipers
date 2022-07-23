@@ -4,20 +4,37 @@ using JeddahSnipers.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JeddahSnipers.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220723000922_addedAttendanceStatus")]
+    partial class addedAttendanceStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.14")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("AttendanceStudent", b =>
+                {
+                    b.Property<int>("AttendanceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AttendanceId", "StudentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("AttendanceStudent");
+                });
 
             modelBuilder.Entity("JeddahSnipers.Models.Admin", b =>
                 {
@@ -274,13 +291,26 @@ namespace JeddahSnipers.Migrations
 
                     b.HasKey("StudentId");
 
-                    b.HasIndex("AttendanceId");
-
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("GroupId");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("AttendanceStudent", b =>
+                {
+                    b.HasOne("JeddahSnipers.Models.Attendance", null)
+                        .WithMany()
+                        .HasForeignKey("AttendanceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JeddahSnipers.Models.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("JeddahSnipers.Models.Group", b =>
@@ -300,10 +330,6 @@ namespace JeddahSnipers.Migrations
 
             modelBuilder.Entity("JeddahSnipers.Models.Student", b =>
                 {
-                    b.HasOne("JeddahSnipers.Models.Attendance", null)
-                        .WithMany("Student")
-                        .HasForeignKey("AttendanceId");
-
                     b.HasOne("JeddahSnipers.Models.Category", "Category")
                         .WithMany("Student")
                         .HasForeignKey("CategoryId");
@@ -315,11 +341,6 @@ namespace JeddahSnipers.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Group");
-                });
-
-            modelBuilder.Entity("JeddahSnipers.Models.Attendance", b =>
-                {
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("JeddahSnipers.Models.Category", b =>

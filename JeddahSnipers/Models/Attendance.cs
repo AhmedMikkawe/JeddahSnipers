@@ -15,7 +15,10 @@ namespace JeddahSnipers.Models
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public DateTime AttendanceDate { get; set; }
+        [Required]
+        public bool AttendanceStatus { get; set; }
         public List<Student> Student { get; set; }
+        public int? StudentId { get; set; }
 
     }
 }

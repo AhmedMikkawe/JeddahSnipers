@@ -1,8 +1,302 @@
-﻿
+﻿@model JeddahSnipers.ViewModels.AttendanceViewModel
 @{
     ViewData["Title"] = "DailyAttendance";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
 }
 
-<h1>DailyAttendance</h1>
+<head>
+        <link href="/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
+</head>
+
+
+<section class="content">
+    <div class="container-fluid">
+        <form role="form" method="post" asp-action="AddAttendance" enctype="multipart/form-data">
+            <input hidden asp-for="attendanceDate"/>
+            <div class="row mt-2">
+                <div class="col-12">
+                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">الحضور اليومي</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+
+                        <div class="card-body">
+                            @if (@TempData["attendanceRecordAlreadySaved"] != null)
+                           {
+                               <div class="alert alert-danger" role="alert">
+                                 @TempData["attendanceRecordAlreadySaved"]
+                                </div>
+                           }
+                               
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="students">المشترك</label>
+                                        <select class="form-control" asp-for="studentId" id="students" multiple="False">
+                                            @foreach (var student in @Model.students)
+                                           {
+                                            <option value="@student.StudentId">@student.FirstName @student.LastName</option>
+                                           }
+                                        </select>
+                                        <span asp-validation-for="studentId" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-2">
+                                          <p class="font-weight-bold">
+                                              التاريخ
+                                          </p>  
+                                        </div>
+                                        <div class="col-10">@Model.attendanceDate</div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <p class="font-weight-bold">الحضور</p>
+                                        </div>
+                                        <div class="col-10">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="radio"
+                                                       value="True" asp-for="attendanceStatus"
+                                                       id="present"
+                                                       />
+                                                <label class="form-check-label"
+                                                       for="present">حاضر</label>
+                                                       <span asp-validation-for="attendanceStatus" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input"
+                                                       type="radio"
+                                                       asp-for="attendanceStatus"
+                                                       value="False" 
+                                                       id="absent"
+                                                       />
+                                                <label class="form-check-label"
+                                                       for="absent">غائب</label>
+                                                       <span asp-validation-for="attendanceStatus" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mx-auto">
+                <button type="submit" class="btn btn-block btn-primary mb-2">
+                    حفظ
+                </button>
+            </div>
+        </form>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+                <table id="attendanceList" class="table table-striped table-bordered">
+                </table>
+
+        </div>
+    </div>
+           <div class="row">
+            <div class="modal fade" id="modal-updateAttendance">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">ادخل الحضور</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form role="form" asp-area="Dashboard" asp-action="UpdateAttendance" asp-controller="Home">
+                            <input id="inputId" hidden name="attendance.attendanceId" asp-for="attendanceId"/>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <p class="font-weight-bold">اسم المشترك</p>
+                                            </div>
+                                            <div class="col-8">
+                                             <p class="font-weight-bold" id="studentname"></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <p class="font-weight-bold">التاريخ</p>
+                                            </div>
+                                            <div class="col-8">
+                                             <p class="font-weight-bold" id="date"></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="attendanceStatus">حالة الحضور</label>
+                                            <select id="status" class="form-control" asp-for="attendance.AttendanceStatus">
+                                                <option value="true">حاضر</option>
+                                                <option value="false">غائب</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">حفظ</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+@section scripts{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+<script src="/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" integrity="sha512-CryKbMe7sjSCDPl18jtJI5DR5jtkUWxPXWaLCst6QjH8wxDexfRJic2WRmRXmstr2Y8SxDDWuBO6CQC6IE4KTA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#students').select2({
+                  placeholder: 'اختر المشترك',
+                  multiple: false,
+                  dir: "rtl"
+
+            });
+
+            //$('#btnaddNewcat').click(function () {
+            //    $('#inputcat').val('');
+            //});
+        });
+        $(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Dashboard/Home/getAttendances",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccess,
+                failure: function (response) {
+                    console.log(response);
+                    alert(response.d);
+                },
+                error: function (response) {
+                    alert(response.d);
+                    console.log(response);
+                }
+            });
+        });
+        function OnSuccess(response) {
+            $(".spinner-border").css("display", "none");
+            $("#attendanceList").DataTable(
+                {
+                    bLengthChange: true,
+                    lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                    bFilter: true,
+                    bSort: true,
+                    bPaginate: true,
+                    data: response,
+                    columns: [{ title: 'اسم المشترك', 'data': 'studentName', className: 'vertical' },
+                    { title: 'التاريخ', 'data': 'attendance.attendanceDate', className: 'vertical',
+                          "render": function (data, type, full, meta) {
+                            return moment(data).format('DD/MM/YYYY');
+                        }
+                    },
+                    { title: 'الحضور', 'data': 'attendance.attendanceStatus', className: 'vertical',
+                    "render": function (data, type, full, meta) {
+                         if (full.attendance.attendanceStatus == true) {
+                             return '<span class="text-success">حاضر</span>';
+                         }else{
+                             return '<span class="text-danger">غائب</span>';
+                         }
+                        }
+                    },
+                    {
+
+                        title: 'التحكم', orderable: false, data: null, defaultContent: '', className: 'vertical',
+                        "render": function (data, type, full, meta) {
+                            return '<a onclick="Update(' + full.attendance.attendanceId+',' + "'" + full.studentName + "'" + ','+ "'" +full.attendance.attendanceDate+ "'" +','+full.attendance.attendanceStatus+')" data-toggle="modal" data-target="#modal-updateAttendance" style="cursor:pointer;"><i style="color:darkblue; font-size:large;" class="fas fa-edit"></i></a> &nbsp; <a onclick="Delete(' + full.attendance.attendanceId + ')" style="cursor:pointer;"><i style="color:red; font-size:large;" class="fas fa-trash-alt"></i></a>';
+                        }
+                    }]
+                });
+
+        };
+
+        function Delete(attendanceId) {
+            debugger;
+            $.confirm({
+                title: 'هل انت متأكد من حذف هذا الحضور؟',
+                content: 'في حالة حذف هذا الحضور لن تستطيع استرجاعها مره اخرى',
+                autoClose: 'cancelAction|8000',
+                buttons: {
+                    deleteUser: {
+                        text: 'حذف الحضور',
+                        action: function () {
+                            $.ajax({
+                                type: "GET",
+                                url: "/Dashboard/Home/DeleteAttendance/" + attendanceId,
+                                dataType: "json",
+                                success: function (result) {
+                                    if (result == "Deleted Done") {
+                                        debugger;
+                                        $.alert('تم حذف الحضور بنجاح ');
+                                        location.reload();
+                                    }
+                                    else if (result == "Error") {
+                                        debugger;
+                                        $.alert('حدث خطأ اثناء عملية الحذف , حاول مره اخري');
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    cancelAction: {
+                        text: 'إلغاء التنفيذ',
+                        action: function () {
+                            $.alert('تم الرجوع عن حذف الحضور');
+                        }
+                    }
+
+                }
+            });
+        }
+        function Update(attendanceid, studentname , date ,status) {
+            debugger;
+            $('#studentname').text(studentname);
+            $('#date').text(moment(date).format('DD/MM/YYYY'));
+            $('#status').prop('value',status);
+            //$('#inputId').attr('name', categoryid);
+            $('#inputId').attr('value', attendanceid);
+            //    window.location = "/Dashboard/Home/UpdateGroup/" + groupid;
+        }
+    </script>
+    }

@@ -57,6 +57,5 @@ namespace JeddahSnipers.Models
         public int? CategoryId { get; set; }
         public Group Group { get; set; }
         public int? GroupId { get; set; }
-        public List<Attendance> Attendance { get; set; }
     }
 }

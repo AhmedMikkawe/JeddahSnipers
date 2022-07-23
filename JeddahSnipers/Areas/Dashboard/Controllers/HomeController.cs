@@ -233,10 +233,81 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         //الحضور اليومي
         public ActionResult DailyAttendance()
         {
-            return View();
+            AttendanceViewModel model = new AttendanceViewModel();
+            model.students = _wonder.Students.ToList();
+            model.attendanceDate =  DateTime.UtcNow.ToString("D");
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult AddAttendance(AttendanceViewModel attendanceViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Attendance attendance = new Attendance();
+                attendance.AttendanceDate = Convert.ToDateTime(DateTime.UtcNow.ToString("D"));
+                attendance.AttendanceStatus = attendanceViewModel.attendanceStatus;
+                attendance.StudentId = attendanceViewModel.studentId;
+                var registeredAttendance = _wonder.Attendances.Where(x=>x.AttendanceDate == attendance.AttendanceDate && x.StudentId == attendance.StudentId).ToList().Count;
+                if(registeredAttendance != 0)
+                {
+                    TempData["attendanceRecordAlreadySaved"] = "لا تستطيع تسجيل نفس الطالب أكثر من مرة في نفس اليوم";
+                    return RedirectToAction("DailyAttendance");
+                }
+                _wonder.Attendances.Add(attendance);
+                _wonder.SaveChanges();
+                return RedirectToAction("DailyAttendance");
+
+            }
+            return RedirectToAction("DailyAttendance");
         }
         #endregion
+        public ActionResult getAttendances()
+        {
+            List<AttendanceViewModel> att = new List<AttendanceViewModel>();
+            var attendances = _wonder.Attendances.ToList();
+            foreach (var item in attendances)
+            {
+                AttendanceViewModel obj = new AttendanceViewModel();
+                obj.StudentName =_wonder.Students.Where(x => x.StudentId == item.StudentId).Select(x=>x.FirstName).FirstOrDefault()+" "+ _wonder.Students.Where(x => x.StudentId == item.StudentId).Select(x => x.LastName).FirstOrDefault();
+                obj.attendance = item;
+                att.Add(obj);
+            }
 
+            //model.students.Select(x=>x.Attendance)
+            return Json(att);
+        }
+        public ActionResult DeleteAttendance(int id)
+        {
+            var categoryRow = _wonder.Attendances.Where(x => x.AttendanceId == id).FirstOrDefault();
+
+            if (categoryRow != null)
+            {
+                _wonder.Attendances.Remove(categoryRow);
+                _wonder.SaveChanges();
+                return Json("Deleted Done");
+            }
+            else
+            {
+                return Json("Error");
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateAttendance(AttendanceViewModel attendance)
+        {
+            var attendanceRow = _wonder.Attendances.Where(x => x.AttendanceId == attendance.attendanceId).FirstOrDefault();
+
+            if (attendanceRow != null)
+            {
+                attendanceRow.AttendanceStatus = attendance.attendanceStatus;
+                _wonder.Attendances.Update(attendanceRow);
+                _wonder.SaveChanges();
+                return RedirectToAction("DailyAttendance");
+            }
+            else
+            {
+                return RedirectToAction("DailyAttendance");
+            }
+        }
 
         #region تصنيف المشتركين
         //قائمة المشتركين

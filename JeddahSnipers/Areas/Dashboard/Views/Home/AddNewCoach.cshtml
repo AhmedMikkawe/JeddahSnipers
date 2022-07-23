@@ -61,6 +61,17 @@
 
                                     </div>
                                 </div>
+                                    <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="Gender">الجنس</label>
+                                        <select class="form-control" asp-for="coach.Gender">
+                                            <option value="ذكر">ذكر</option>
+                                            <option value="أنثى">أنثى</option>
+                                        </select>
+                                        <span asp-validation-for="coach.Gender" class="text-danger"></span>
+                                    </div>
+                                </div>
+
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="coach.Nationality">الجنسية</label>
