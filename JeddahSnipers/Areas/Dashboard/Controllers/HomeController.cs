@@ -30,7 +30,15 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             {
                 return RedirectToAction("Login");
             }
-            return View();
+            DashboardIndexViewModel model = new DashboardIndexViewModel();
+            model.coachesCount = _wonder.Coachs.ToList().Count;
+            model.studentsCount = _wonder.Students.ToList().Count;
+            model.groupsCount = _wonder.Groups.ToList().Count;
+
+            model.LastStudents = _wonder.Students.Select(x => new LastStudentsViewModel { StudentId =  x.StudentId, CategoryName =  x.Category.CategoryName, StudentFirstName =  x.FirstName , StudentLastName = x.LastName, StudentNationality = x.Nationality, StudentAge = x.Group.Age}).OrderByDescending(x=>x.StudentId).Take(5);
+            model.LastGroups = _wonder.Groups.Select(x => new LastGroupsViewModel { GroupId = x.GroupId, GroupName = x.GroupName, StudentsCount = x.Student.ToList().Count, StartTime =  x.StartTime, EndTime = x.EndTime, CoachFirstName = x.Coach.FirstName, CoachLastName =  x.Coach.LastName }).OrderByDescending(x => x.GroupId).Take(5);
+
+            return View(model);
         }
 
         #region الادمن
@@ -286,24 +294,67 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             {
                 return RedirectToAction("Login");
             }
-            var student = _wonder.Students.Where(x => x.StudentId == id).FirstOrDefault();
-            ViewBag.Categories = _wonder.Categories.ToList();
-            ViewBag.Groups = _wonder.Groups.ToList();
-            return View(student);
+            UpdateStudentViewModel model = new UpdateStudentViewModel();
+            model.student = _wonder.Students.Where(x => x.StudentId == id).FirstOrDefault();
+            model.groups = _wonder.Groups.ToList();
+            model.categories = _wonder.Categories.ToList();
+            
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult UpdateStudent(Student student)
+        public IActionResult UpdateStudent(UpdateStudentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _wonder.Entry(student).State = EntityState.Modified;
+                string stdNIdFileName = string.Empty;
+                string stdAppFileName = string.Empty;
+                string imageFileName = string.Empty;
+                if (model.NationalIDFile != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString();
+                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                    stdNIdFileName = model.NationalIDFile.FileName;
+                    string fullPath = Path.Combine(uploads, stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName));
+                    model.NationalIDFile.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    stdNIdFileName = stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName);
+                    model.student.NationalIDFile = stdNIdFileName;
+                }
+                if (model.ApplicationFile != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString();
+                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                    stdAppFileName = model.ApplicationFile.FileName;
+                    string fullPath = Path.Combine(uploads, stdAppFileName + newfileName + Path.GetExtension(stdAppFileName));
+                    model.ApplicationFile.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    stdAppFileName = stdAppFileName + newfileName + Path.GetExtension(stdAppFileName);
+                    model.student.ApplicationFile = stdAppFileName;
+                }
+                if (model.studentImage != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString();
+                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                    imageFileName = model.studentImage.FileName;
+                    string fullPath = Path.Combine(uploads, imageFileName + newfileName + Path.GetExtension(imageFileName));
+                    model.studentImage.CopyTo(new FileStream(fullPath, FileMode.Create));
+                    imageFileName = imageFileName + newfileName + Path.GetExtension(imageFileName);
+                    model.student.Image = imageFileName;
+                }
+                _wonder.Entry(model.student).State = EntityState.Modified;
                 _wonder.SaveChanges();
                 return RedirectToAction("StudentMenu");
             }
             else
             {
-                return RedirectToAction("UpdateStudent", student.StudentId);
+                UpdateStudentViewModel x = new UpdateStudentViewModel();
+                x.student = model.student;
+                x.groups = _wonder.Groups.ToList();
+                x.categories = _wonder.Categories.ToList();
+               
+                return View(x);//RedirectToAction("UpdateStudent", "Home", new {id = student.StudentId ,student});
             }
         }
 
