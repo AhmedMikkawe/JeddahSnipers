@@ -178,41 +178,29 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             */
             if (ModelState.IsValid)
             {
-                string stdNIdFileName = string.Empty;
-                string stdAppFileName = string.Empty;
-                string imageFileName = string.Empty;
                 if (studentAndparent.StudentNationalIDFile != null)
                 {
                     Guid guid = Guid.NewGuid();
-                    string newfileName = guid.ToString();
-                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                    stdNIdFileName = studentAndparent.StudentNationalIDFile.FileName;
-                    string fullPath = Path.Combine(uploads, stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName));
-                    studentAndparent.StudentNationalIDFile.CopyTo(new FileStream(fullPath, FileMode.Create));
-                    stdNIdFileName = stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName);
-                    studentAndparent.student.NationalIDFile = stdNIdFileName;
+                    string newfileName = guid.ToString() + Path.GetExtension(studentAndparent.StudentNationalIDFile.FileName);
+                    string path = Path.Combine(hostingEnvironment.WebRootPath, "uploads", newfileName);
+                    studentAndparent.StudentNationalIDFile.CopyTo(new FileStream(path, FileMode.Create));
+                    studentAndparent.student.NationalIDFile = newfileName;
                 }
                 if (studentAndparent.StudentApplicationFile != null)
                 {
                     Guid guid = Guid.NewGuid();
-                    string newfileName = guid.ToString();
-                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                    stdAppFileName = studentAndparent.StudentApplicationFile.FileName;
-                    string fullPath = Path.Combine(uploads, stdAppFileName + newfileName + Path.GetExtension(stdAppFileName));
-                    studentAndparent.StudentNationalIDFile.CopyTo(new FileStream(fullPath, FileMode.Create));
-                    stdAppFileName = stdAppFileName + newfileName + Path.GetExtension(stdAppFileName);
-                    studentAndparent.student.ApplicationFile = stdAppFileName;
+                    string newfileName = guid.ToString() + Path.GetExtension(studentAndparent.StudentApplicationFile.FileName);
+                    string path = Path.Combine(hostingEnvironment.WebRootPath, "uploads", newfileName);
+                    studentAndparent.StudentApplicationFile.CopyTo(new FileStream(path, FileMode.Create));
+                    studentAndparent.student.ApplicationFile = newfileName;
                 }
                 if (studentAndparent.studentImage != null)
                 {
                     Guid guid = Guid.NewGuid();
-                    string newfileName = guid.ToString();
-                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                    imageFileName = studentAndparent.studentImage.FileName;
-                    string fullPath = Path.Combine(uploads, imageFileName + newfileName + Path.GetExtension(imageFileName));
-                    studentAndparent.studentImage.CopyTo(new FileStream(fullPath, FileMode.Create));
-                    imageFileName = imageFileName + newfileName + Path.GetExtension(imageFileName);
-                    studentAndparent.student.Image = imageFileName;
+                    string newfileName = guid.ToString() + Path.GetExtension(studentAndparent.studentImage.FileName);
+                    string path = Path.Combine(hostingEnvironment.WebRootPath, "uploads", newfileName);
+                    studentAndparent.studentImage.CopyTo(new FileStream(path, FileMode.Create));
+                    studentAndparent.student.Image = newfileName;
                 }
 
                 _wonder.Students.Add(studentAndparent.student);
@@ -225,22 +213,6 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 studentAndparent.groups = _wonder.Groups.ToList();
                 return View(studentAndparent);
             }
-            //var filePath = Path.Combine(_hostingEnv.WebRootPath, "Images");
-            //if (Photo_1 != null)
-            //{
-            //    string fileName = Photo_1.FileName;
-
-            //    var fileNameWithPath = Path.Combine(filePath, fileName);
-
-            //    using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-            //    {
-            //        Photo_1.CopyTo(stream);
-            //    }
-            //    _wonder.Images.Add(new Image() { ProductImage = fileName, CaseCode = obj.CaseCode });
-
-            //    _wonder.SaveChanges();
-            //}
-
         }
 
         //قائمة الطلاب
@@ -307,41 +279,29 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         {
             if (ModelState.IsValid)
             {
-                string stdNIdFileName = string.Empty;
-                string stdAppFileName = string.Empty;
-                string imageFileName = string.Empty;
                 if (model.NationalIDFile != null)
                 {
                     Guid guid = Guid.NewGuid();
-                    string newfileName = guid.ToString();
-                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                    stdNIdFileName = model.NationalIDFile.FileName;
-                    string fullPath = Path.Combine(uploads, stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName));
-                    model.NationalIDFile.CopyTo(new FileStream(fullPath, FileMode.Create));
-                    stdNIdFileName = stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName);
-                    model.student.NationalIDFile = stdNIdFileName;
+                    string newfileName = guid.ToString() + Path.GetExtension(model.NationalIDFile.FileName);
+                    string path = Path.Combine(hostingEnvironment.WebRootPath, "uploads", newfileName);
+                    model.NationalIDFile.CopyTo(new FileStream(path, FileMode.Create));
+                    model.student.NationalIDFile = newfileName;
                 }
                 if (model.ApplicationFile != null)
                 {
                     Guid guid = Guid.NewGuid();
-                    string newfileName = guid.ToString();
-                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                    stdAppFileName = model.ApplicationFile.FileName;
-                    string fullPath = Path.Combine(uploads, stdAppFileName + newfileName + Path.GetExtension(stdAppFileName));
-                    model.ApplicationFile.CopyTo(new FileStream(fullPath, FileMode.Create));
-                    stdAppFileName = stdAppFileName + newfileName + Path.GetExtension(stdAppFileName);
-                    model.student.ApplicationFile = stdAppFileName;
+                    string newfileName = guid.ToString() + Path.GetExtension(model.ApplicationFile.FileName);
+                    string path = Path.Combine(hostingEnvironment.WebRootPath, "uploads", newfileName);
+                    model.ApplicationFile.CopyTo(new FileStream(path, FileMode.Create));
+                    model.student.ApplicationFile = newfileName;
                 }
                 if (model.studentImage != null)
                 {
                     Guid guid = Guid.NewGuid();
-                    string newfileName = guid.ToString();
-                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                    imageFileName = model.studentImage.FileName;
-                    string fullPath = Path.Combine(uploads, imageFileName + newfileName + Path.GetExtension(imageFileName));
-                    model.studentImage.CopyTo(new FileStream(fullPath, FileMode.Create));
-                    imageFileName = imageFileName + newfileName + Path.GetExtension(imageFileName);
-                    model.student.Image = imageFileName;
+                    string newfileName = guid.ToString() + Path.GetExtension(model.studentImage.FileName);
+                    string path = Path.Combine(hostingEnvironment.WebRootPath, "uploads", newfileName);
+                    model.studentImage.CopyTo(new FileStream(path, FileMode.Create));
+                    model.student.Image = newfileName;
                 }
                 _wonder.Entry(model.student).State = EntityState.Modified;
                 _wonder.SaveChanges();
