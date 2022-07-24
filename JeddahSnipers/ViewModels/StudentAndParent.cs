@@ -24,6 +24,6 @@ namespace JeddahSnipers.ViewModels
         public IFormFile studentImage { get; set; }
 
         public IFormFile StudentApplicationFile { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
     }
 }

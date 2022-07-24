@@ -894,7 +894,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             _wonder.SaveChanges();
             return Json("played successfully");
         }
-
+        public ActionResult StudentPayment(int id)
+        {
+            return View();
+        }
         #endregion
 
     }

@@ -12,13 +12,13 @@ namespace JeddahSnipers.Models
         [Key]
         public int PaymentId { get; set; }
         [Required]
-        public string Duration { get; set; }
+        public byte Duration { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -30,7 +30,7 @@ namespace JeddahSnipers.Models
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
 
         [Required]
         public float Amount { get; set; }

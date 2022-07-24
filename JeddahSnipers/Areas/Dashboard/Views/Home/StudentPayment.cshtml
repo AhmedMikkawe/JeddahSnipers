@@ -1,0 +1,127 @@
+﻿@model JeddahSnipers.ViewModels.StudentPaymentViewModel
+@{
+    ViewData["Title"] = "Student Payment";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <form role="form" method="post" asp-action="StudentPayment" enctype="multipart/form-data">
+            <div class="row mt-2">
+                <div class="col-12">
+                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">الدفع</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+
+                        <div class="card-body">
+                            <div class="row">
+                                <input hidden asp-for="studentId" />
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="payment.Amount">قيمة الاشتراك</label>
+                                        <input type="number"
+                                               class="form-control"
+                                               asp-for="payment.Amount"
+                                               placeholder="100.00" />
+                                        <span asp-validation-for="payment.Amount" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                    <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="payment.Duration">مدة الاشتراك</label>
+                                        <select class="form-control" asp-for="payment.Duration">
+                                            <option value="1">شهر</option>
+                                            <option value="3">3 أشهر</option>
+                                            <option value="6">6 أشهر</option>
+                                            <option value="12">سنة</option>
+                                        </select>
+                                        <span asp-validation-for="payment.Duration" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="payment.AmountPaid">المدفوع</label>
+                                        <input type="number"
+                                               class="form-control"
+                                               asp-for="payment.AmountPaid"
+                                               placeholder="" />
+                                        <span asp-validation-for="payment.AmountPaid" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="payment.BalanceAmount">الباقي</label>
+                                        <input type="number"
+                                               class="form-control"
+                                               asp-for="payment.BalanceAmount" readonly/>
+                                        <span asp-validation-for="payment.BalanceAmount" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="payment.StartDate">تاريخ البدء</label>
+                                        <input type="date"
+                                                class="form-control"
+                                                asp-for="payment.StartDate"/>
+                                        <span asp-validation-for="payment.StartDate" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label>تاريخ الانتهاء</label>
+                                        <input type="date"
+                                                class="form-control"
+                                                 readonly/>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="payment.PaymentType">نوع الدفع</label>
+                                        <select class="form-control" asp-for="payment.PaymentType">
+                                            <option>اختر نوع الدفع</option>
+                                            <option value="تحويل بنكي">تحويل بنكي</option>
+                                            <option value="كاش">كاش</option>
+                                            <option value="شبكة">شبكة</option>
+                                        </select>
+                                        <span asp-validation-for="payment.PaymentType" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mx-auto">
+                <button type="submit" class="btn btn-block btn-primary mb-2">
+                    حفظ
+                </button>
+            </div>
+        </form>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+@section scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+
+
+
+    </script>
+}
