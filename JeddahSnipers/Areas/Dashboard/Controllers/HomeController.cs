@@ -394,6 +394,8 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             return RedirectToAction("DailyAttendance");
         }
         #endregion
+
+        #region الحضور
         public ActionResult getAttendances()
         {
             if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
@@ -445,6 +447,8 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 return RedirectToAction("DailyAttendance");
             }
         }
+
+        #endregion
 
         #region تصنيف المشتركين
         //قائمة المشتركين
@@ -851,6 +855,46 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 return Json("Error");
             }
         }
+        #endregion
+
+
+        #region الدفع 
+
+        public IActionResult Payment()
+        {
+            return View();
+        }
+        public IActionResult PaymentData()
+        {
+            var students = _wonder.Students.ToList();
+            List<StudentAndParent> StudentWithPayDate = new List<StudentAndParent>();
+            foreach (var item in students)
+            {
+                StudentAndParent obj = new StudentAndParent();
+                obj.student = item;
+                obj.StudentName = item.FirstName + " " + item.LastName;
+                obj.PaymentDate = _wonder.Payments.OrderByDescending(x => x.PaymentId).Where(x => x.StudentId == item.StudentId).Select(x => x.PaymentDate).FirstOrDefault();
+                StudentWithPayDate.Add(obj);
+            }
+            return Json(StudentWithPayDate);
+        }
+        public IActionResult HoldStudentPayment(int StudentId)
+        {
+            var student = _wonder.Students.Where(x => x.StudentId == StudentId).FirstOrDefault();
+            student.Status = "hold";
+            _wonder.Students.Update(student);
+            _wonder.SaveChanges();
+            return Json("holded successfully");
+        }
+        public IActionResult PlayStudentPayment(int StudentId)
+        {
+            var student = _wonder.Students.Where(x => x.StudentId == StudentId).FirstOrDefault();
+            student.Status = "active";
+            _wonder.Students.Update(student);
+            _wonder.SaveChanges();
+            return Json("played successfully");
+        }
+
         #endregion
 
     }

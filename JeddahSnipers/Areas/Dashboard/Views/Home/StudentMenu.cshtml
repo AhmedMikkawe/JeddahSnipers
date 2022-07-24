@@ -74,6 +74,20 @@
                     { title: 'مجموعه', 'data': 'groupName', className: 'vertical' },
                     { title: 'التصنيف', 'data': 'categoryName', className: 'vertical' },
                     {
+                        title: 'الحضور', 'data': 'student.status', className: 'vertical',
+                        "render": function (data, type, full, meta) {
+                            if (full.student.status == null) {
+                                return '';
+                            }
+                            else if (full.student.status == "hold") {
+                                return '<span style="color:red">Hold</span>';
+                            }
+                            else if (full.student.status == "active") {
+                                return '<span style="color:green">Active</span>';
+                            }
+                        }
+                    },
+                    {
                         title: 'التنفيذ', orderable: false, data: null, defaultContent: '', className: 'vertical',
                         "render": function (data, type, full, meta) {
                             return '<a onclick="Update(' + full.student.studentId + ')" style="cursor:pointer;"><i style="color:darkblue; font-size:large;" class="fas fa-edit"></i></a> &nbsp; <a onclick="Delete(' + full.student.studentId + ')" style="cursor:pointer;"><i style="color:red; font-size:large;" class="fas fa-trash-alt"></i></a>';
@@ -114,7 +128,7 @@
                             $.alert('تم الرجوع عن حذف الطالب');
                         }
                     }
-                        
+
                 }
             });
         }

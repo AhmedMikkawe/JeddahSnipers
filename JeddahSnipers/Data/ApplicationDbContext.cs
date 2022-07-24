@@ -16,5 +16,6 @@ namespace JeddahSnipers.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<Payment> Payments { get; set; }
     }
 }

@@ -36,10 +36,10 @@
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
-                        <span id="validemail1" style="display: none; font-size: 13px; color: #D10024">Please enter your e-mail</span>
-                        <span id="validemail2" style="display: none; font-size: 13px; color: #D10024">This e-mail isn't Exist !!</span>
-
                     </div>
+                    <div id="validemail1" style="display: none; font-size: 13px; color: #D10024; margin-bottom: 1rem; margin-top: -13px;">Please enter your e-mail</div>
+                    <div id="validemail2" style="display: none; font-size: 13px; color: #D10024; margin-bottom: 1rem; margin-top: -13px;">This e-mail isn't Exist !!</div>
+
                     <div class="input-group mb-3">
                         <input id="password" type="password" class="form-control" placeholder="Password">
                         <div class="input-group-append">
@@ -47,9 +47,10 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
-                        <span id="validpassword1" style="display: none; font-size: 13px; color: #D10024">Please enter your Password</span>
-                        <span id="validpassword2" style="display: none; font-size: 13px; color: #D10024">Password is Wrong , Try again..</span>
                     </div>
+                    <div id="validpassword1" style="display: none; font-size: 13px; color: #D10024;margin-bottom: 1rem; margin-top: -13px;">Please enter your Password</div>
+                    <div id="validpassword2" style="display: none; font-size: 13px; color: #D10024;margin-bottom: 1rem; margin-top: -13px;">Password is Wrong , Try again..</div>
+
                     <div class="row">
                         <!-- /.col -->
                         <div class="col-12">
@@ -74,10 +75,14 @@
 <script>
     $(document).ready(function () {
         $('#signin').click(function () {
+            $('#validemail1').hide();
+            $('#validemail2').hide();
+            $('#validpassword1').hide();
+            $('#validpassword2').hide();
             var email = $('#email').val();
             var password = $('#password').val();
             if (email == "" || email == undefined) {
-                $('#validphone1').show();
+                $('#validemail1').show();
             }
             if (password == "" || password == undefined) {
                 $('#validpassword1').show();
@@ -91,7 +96,7 @@
                     dataType: "json",
                     success: function (result) {
                         if (result == "this email isn't exist") {
-                            $('#validphone2').show();
+                            $('#validemail2').show();
                         }
                         else if (result == "wrong password") {
                             $('#validpassword2').show();
