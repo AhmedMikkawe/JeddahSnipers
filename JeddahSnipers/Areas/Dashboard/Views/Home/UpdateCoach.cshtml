@@ -1,6 +1,6 @@
-﻿@model JeddahSnipers.Models.Coach
+﻿@model JeddahSnipers.ViewModels.AddNewCoachViewModel
 @{
-    ViewData["Title"] = "AddNewCoach";
+    ViewData["Title"] = "Update Coach";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
 }
 <style>
@@ -53,7 +53,8 @@
 <section class="content">
     <div class="container-fluid">
         <form role="form" method="post" asp-action="UpdateCoach" enctype="multipart/form-data">
-            <input hidden asp-for="CoachId" />
+            <input hidden asp-for="coach.CoachId" />
+            
             <div class="row mt-2">
                 <div class="col-12">
                     <div class="text-danger" asp-validation-summary="ModelOnly"></div>
@@ -71,9 +72,11 @@
                                     <div>
                                         <div style="display:flex">
                                             <div class="container">
-                                                @if (Model.Image != null)
+                                                <input hidden asp-for="coach.CVFile"/>
+                                                <input hidden asp-for="coach.Image"/>
+                                                @if (Model.coach.Image != null)
                                                 {
-                                                    <img id="img" src="~/uploads/@Model.Image" alt="@Model.Image" class="image img-responsive img-thumbnail">
+                                                    <img id="img" src="~/uploads/@Model.coach.Image" class="image img-responsive img-thumbnail">
                                                 }
                                                 else
                                                 {
@@ -93,12 +96,12 @@
                                 <!----------------------------------------- نضيف تصنيف و مجموعه (هنجيبهم بفور ايتش من الداتابيز ------------------------------------->
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
-                                        <label for="FirstName">الاسم الاول</label>
+                                        <label for="coach.FirstName">الاسم الاول</label>
                                         <input type="text"
                                                class="form-control"
-                                               asp-for="FirstName"
+                                               asp-for="coach.FirstName"
                                                placeholder="الاسم الاول" />
-                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        <span asp-validation-for="coach.FirstName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -106,9 +109,9 @@
                                         <label for="StudentLastName">اسم العائلة</label>
                                         <input type="text"
                                                class="form-control"
-                                               asp-for="LastName"
+                                               asp-for="coach.LastName"
                                                placeholder="اسم العائلة" />
-                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                        <span asp-validation-for="coach.LastName" class="text-danger"></span>
                                     </div>
                                 </div>
 
@@ -117,54 +120,43 @@
                                         <label for="BirthDate">تاريخ الميلاد</label>
                                         <input type="date"
                                                class="form-control"
-                                               asp-for="BirthDate" />
-                                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+                                               asp-for="coach.BirthDate" />
+                                        <span asp-validation-for="coach.BirthDate" class="text-danger"></span>
 
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="Gender">الجنس</label>
-                                        <select class="form-control" asp-for="Gender">
+                                        <select class="form-control" asp-for="coach.Gender">
                                             <option value="ذكر">ذكر</option>
                                             <option value="أنثى">أنثى</option>
                                         </select>
-                                        <span asp-validation-for="Gender" class="text-danger"></span>
+                                        <span asp-validation-for="coach.Gender" class="text-danger"></span>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label for="Nationality">الجنسية</label>
-                                        <select class="form-control" asp-for="Nationality">
+                                        <select class="form-control" asp-for="coach.Nationality">
                                             <option value="">اختر الجنسية</option>
                                             <option value="مقيم">مقيم</option>
                                             <option value="سعودي">سعودي</option>
                                         </select>
-                                        <span asp-validation-for="Nationality" class="text-danger"></span>
+                                        <span asp-validation-for="coach.Nationality" class="text-danger"></span>
 
                                     </div>
                                 </div>
-                                @*<div class="col-12 col-md-6">
-                                      <div class="form-group">
-                                        <label for="nationalId">رقم الهوية</label>
-                                        <input
-                                          type="text"
-                                          class="form-control"
-                                          id="nationalId"
-                                               asp-for="StudentId"
-                                        />
-                                      </div>
-                                    </div>*@
-
 
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
+                                        <input hidden asp-for="coach.CVFile"/>
                                         <label for="StudentApplicationFile">رفع السيرة الذاتية</label>
                                         <input type="file"
                                                class="form-control-file"
-                                               asp-for="CVFile" />
-                                        <span asp-validation-for="CVFile" class="text-danger"></span>
+                                               asp-for="coach.CVFile" />
+                                        <span asp-validation-for="coach.CVFile" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>

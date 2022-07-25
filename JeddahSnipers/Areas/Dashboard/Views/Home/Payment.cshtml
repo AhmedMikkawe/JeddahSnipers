@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "StudentMenu";
+    ViewData["Title"] = "Payment";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
 }
 
@@ -88,7 +88,7 @@
                     {
                         title: 'التنفيذ', orderable: false, data: null, defaultContent: '', className: 'vertical',
                         "render": function (data, type, full, meta) {
-                            if (full.student.status == null) {
+                            if (full.student.status == null || full.student.status == 'expired') {
                                 return '<a onclick="Payment(' + full.student.studentId + ')" style="cursor:pointer;"><i style="color:darkblue; font-size:large;" class="fas fa-money-bill-alt"></i></a> &nbsp; <span>  </span>';
                             }
                             else if (full.student.status == 'hold') {
@@ -97,6 +97,7 @@
                             else if (full.student.status == 'active') {
                                 return '<a onclick="Payment(' + full.student.studentId + ')" style="cursor:pointer;" ><i style="color:darkblue; font-size:large;" class="fas fa-money-bill-alt"></i></a> &nbsp; <a id="hold_' + full.student.studentId + '" onclick="OnHold(' + full.student.studentId + ')" style="cursor:pointer;" title="ايقاف الدفع"><i style="color:red; font-size:large;" class="fas fa-pause"></i></a><a id="active_' + full.student.studentId + '" onclick="Play(' + full.student.studentId + ')" style="cursor:pointer;display:none" title="تشغيل الدفع"><i style="color:green; font-size:large;" class="fas fa-play"></i></a>';
                             }
+                            
                         }
                     }]
                 });

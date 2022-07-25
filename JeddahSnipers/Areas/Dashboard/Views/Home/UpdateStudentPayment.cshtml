@@ -1,0 +1,126 @@
+﻿@model JeddahSnipers.Models.Payment
+@{
+    ViewData["Title"] = "Update Student Payment";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <form role="form" method="post" asp-action="UpdateStudentPayment" enctype="multipart/form-data">
+            <div class="row mt-2">
+                <div class="col-12">
+                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">الدفع</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+
+                        <div class="card-body">
+                            <div class="row">
+                                <input hidden asp-for="PaymentId" />
+                                <input hidden asp-for="StudentId" />
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="Amount">قيمة الاشتراك</label>
+                                        <input type="number"
+                                               class="form-control"
+                                               asp-for="Amount"
+                                               placeholder="100.00" />
+                                        <span asp-validation-for="Amount" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="Duration">مدة الاشتراك</label>
+                                        <select class="form-control" asp-for="Duration">
+                                            <option value="1">شهر</option>
+                                            <option value="3">3 أشهر</option>
+                                            <option value="6">6 أشهر</option>
+                                            <option value="12">سنة</option>
+                                        </select>
+                                        <span asp-validation-for="Duration" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="AmountPaid">المدفوع</label>
+                                        <input type="number"
+                                               class="form-control"
+                                               asp-for="AmountPaid"
+                                               placeholder="" />
+                                        <span asp-validation-for="AmountPaid" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="BalanceAmount">الباقي</label>
+                                        <input type="number"
+                                               class="form-control"
+                                               asp-for="BalanceAmount" readonly />
+                                        <span asp-validation-for="BalanceAmount" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="StartDate">تاريخ البدء</label>
+                                        <input type="date"
+                                               class="form-control"
+                                               asp-for="StartDate" />
+                                        <span asp-validation-for="StartDate" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="PaymentType">نوع الدفع</label>
+                                        <select class="form-control" asp-for="PaymentType">
+                                            <option>اختر نوع الدفع</option>
+                                            <option value="تحويل بنكي">تحويل بنكي</option>
+                                            <option value="كاش">كاش</option>
+                                            <option value="شبكة">شبكة</option>
+                                        </select>
+                                        <span asp-validation-for="PaymentType" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mx-auto">
+                <button type="submit" class="btn btn-block btn-primary mb-2">
+                    حفظ
+                </button>
+            </div>
+        </form>
+        
+    </div>
+    <!-- /.container-fluid -->
+</section>
+@section scripts{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+          $(document).ready(function() {
+            $("#AmountPaid").on('keyup', function() {
+                let amount = $("#Amount").val();
+                let paid = $("#AmountPaid").val();
+                let balance = $("#BalanceAmount").val(amount - paid);
+            });
+            $("#Amount").on('keyup', function() {
+                let amount = $("#Amount").val();
+                let paid = $("#AmountPaid").val();
+                let balance = $("#BalanceAmount").val(amount - paid);
+            });
+        });
+    </script>
+}

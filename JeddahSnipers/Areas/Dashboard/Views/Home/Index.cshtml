@@ -1,6 +1,6 @@
 ﻿@model JeddahSnipers.ViewModels.DashboardIndexViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Jeddah Snipers";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
 }
 
@@ -140,6 +140,74 @@
                               <td>From @item.StartTime To @item.EndTime</td>
                               <td>@item.CoachFirstName @item.CoachLastName</td>
 
+                          </tr>
+                      }  
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+
+            </section>
+            <section class="col-12 col-lg-6 connectedSortable">
+             <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">اشتراكات متوقفة</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>رقم الهوية</th>
+                      <th>التصنيف</th>
+                      <th>الاسم</th>
+                      <th>رقم الجوال</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                      @foreach (var item in Model.HoldAttendance)
+                      {
+                          <tr>
+                             <td>@item.StudentId</td>
+                             <td>@item.CategoryName</td>
+                              <td>@item.StudentFirstName @item.StudentLastName</td>
+                             <td>@item.StudentPhone</td>
+                          </tr>
+                      }  
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+
+            </section>
+               <section class="col-12 col-lg-6 connectedSortable">
+             <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">اشتراكات منتهية</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>الاسم</th>
+                      <th>المدة</th>
+                      <th>انتهاء الاشتراك</th>
+                      <th>المبلغ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                      @foreach (var item in Model.ExpiredPayments)
+                      {
+                          <tr>
+                             <td>@item.StudentName</td>
+                             <td>@item.Duration</td>
+                              <td>@item.EndDate</td>
+                             <td>@item.Amount</td>
                           </tr>
                       }  
                   </tbody>

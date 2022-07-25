@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "StudentMenu";
+    ViewData["Title"] = "Student Menu";
     Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
 }
 
@@ -84,6 +84,9 @@
                             }
                             else if (full.student.status == "active") {
                                 return '<span style="color:green">Active</span>';
+                            }else if(full.student.status == "expired"){
+                               return '<span style="color:grey">Expired</span>';
+
                             }
                         }
                     },

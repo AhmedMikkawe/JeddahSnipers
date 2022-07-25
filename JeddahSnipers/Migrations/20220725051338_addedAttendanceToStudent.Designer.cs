@@ -4,14 +4,16 @@ using JeddahSnipers.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JeddahSnipers.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220725051338_addedAttendanceToStudent")]
+    partial class addedAttendanceToStudent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,8 +65,6 @@ namespace JeddahSnipers.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("AttendanceId");
-
-                    b.HasIndex("StudentId");
 
                     b.ToTable("Attendances");
                 });
@@ -260,6 +260,9 @@ namespace JeddahSnipers.Migrations
                     b.Property<string>("ApplicationFile")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("AttendanceId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("Date");
 
@@ -344,20 +347,13 @@ namespace JeddahSnipers.Migrations
 
                     b.HasKey("StudentId");
 
+                    b.HasIndex("AttendanceId");
+
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("GroupId");
 
                     b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("JeddahSnipers.Models.Attendance", b =>
-                {
-                    b.HasOne("JeddahSnipers.Models.Student", "Student")
-                        .WithMany("Attendance")
-                        .HasForeignKey("StudentId");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("JeddahSnipers.Models.Group", b =>
@@ -388,6 +384,10 @@ namespace JeddahSnipers.Migrations
 
             modelBuilder.Entity("JeddahSnipers.Models.Student", b =>
                 {
+                    b.HasOne("JeddahSnipers.Models.Attendance", "Attendance")
+                        .WithMany("Student")
+                        .HasForeignKey("AttendanceId");
+
                     b.HasOne("JeddahSnipers.Models.Category", "Category")
                         .WithMany("Student")
                         .HasForeignKey("CategoryId");
@@ -396,9 +396,16 @@ namespace JeddahSnipers.Migrations
                         .WithMany("Student")
                         .HasForeignKey("GroupId");
 
+                    b.Navigation("Attendance");
+
                     b.Navigation("Category");
 
                     b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("JeddahSnipers.Models.Attendance", b =>
+                {
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("JeddahSnipers.Models.Category", b =>
@@ -420,8 +427,6 @@ namespace JeddahSnipers.Migrations
 
             modelBuilder.Entity("JeddahSnipers.Models.Student", b =>
                 {
-                    b.Navigation("Attendance");
-
                     b.Navigation("Payment");
                 });
 #pragma warning restore 612, 618

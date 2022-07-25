@@ -17,7 +17,7 @@ namespace JeddahSnipers.Models
         public DateTime AttendanceDate { get; set; }
         [Required]
         public bool AttendanceStatus { get; set; }
-        public List<Student> Student { get; set; }
+        public Student Student { get; set; }
         public int? StudentId { get; set; }
 
     }

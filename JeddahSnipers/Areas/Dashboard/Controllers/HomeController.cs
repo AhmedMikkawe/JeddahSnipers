@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using JeddahSnipers.Classes;
 
 namespace JeddahSnipers.Areas.Dashboard.Controllers
 {
@@ -24,24 +25,42 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             _wonder = wonder;
             this.hostingEnvironment = hostingEnvironment;
         }
+        [SessionFilter]
         public IActionResult Index()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
+            var students = _wonder.Students.Where(x => x.Status == "hold" || x.Status == "active").ToList();
+            foreach (var item in students)
             {
-                return RedirectToAction("Login");
+                int counter = 0;
+                var payments = _wonder.Payments.Where(x => x.StudentId == item.StudentId).ToList();
+                foreach (var x in payments)
+                {
+                    if (x.EndDate > DateTime.UtcNow)
+                    {
+                        counter++;
+                    }
+                }
+                if (counter == 0)
+                {
+                    item.Status = "expired";
+                    _wonder.Students.Update(item);
+                    _wonder.SaveChanges();
+                }
             }
             DashboardIndexViewModel model = new DashboardIndexViewModel();
             model.coachesCount = _wonder.Coachs.ToList().Count;
             model.studentsCount = _wonder.Students.ToList().Count;
             model.groupsCount = _wonder.Groups.ToList().Count;
 
-            model.LastStudents = _wonder.Students.Select(x => new LastStudentsViewModel { StudentId =  x.StudentId, CategoryName =  x.Category.CategoryName, StudentFirstName =  x.FirstName , StudentLastName = x.LastName, StudentNationality = x.Nationality, StudentAge = x.Group.Age}).OrderByDescending(x=>x.StudentId).Take(5);
-            model.LastGroups = _wonder.Groups.Select(x => new LastGroupsViewModel { GroupId = x.GroupId, GroupName = x.GroupName, StudentsCount = x.Student.ToList().Count, StartTime =  x.StartTime, EndTime = x.EndTime, CoachFirstName = x.Coach.FirstName, CoachLastName =  x.Coach.LastName }).OrderByDescending(x => x.GroupId).Take(5);
-
+            model.LastStudents = _wonder.Students.Select(x => new LastStudentsViewModel { StudentId = x.StudentId, CategoryName = x.Category.CategoryName, StudentFirstName = x.FirstName, StudentLastName = x.LastName, StudentNationality = x.Nationality, StudentAge = x.Group.Age }).OrderByDescending(x => x.StudentId).Take(5);
+            model.LastGroups = _wonder.Groups.Select(x => new LastGroupsViewModel { GroupId = x.GroupId, GroupName = x.GroupName, StudentsCount = x.Student.ToList().Count, StartTime = x.StartTime, EndTime = x.EndTime, CoachFirstName = x.Coach.FirstName, CoachLastName = x.Coach.LastName }).OrderByDescending(x => x.GroupId).Take(5);
+            model.HoldAttendance = _wonder.Students.Where(x => x.Status == "hold").Select(x => new HoldAttendanceViewModel { StudentId = x.StudentId, CategoryName = x.Category.CategoryName, StudentFirstName = x.FirstName, StudentLastName = x.LastName, StudentPhone = x.Phone }).OrderByDescending(x => x.StudentId).Take(5);
+            model.ExpiredPayments = _wonder.Payments.Where(x => x.EndDate < DateTime.UtcNow).OrderByDescending(x => x.PaymentId).Select(x => new ExpiredPaymentViewModel { StudentName = x.Student.FirstName + " " + x.Student.LastName, Amount = x.Amount, Duration = x.Duration, EndDate = x.EndDate }).Take(5);
             return View(model);
-        }
 
+        }
         #region الادمن
+        [SessionFilter]
         public ActionResult UpdateAdminProfile()
         {
             if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
@@ -49,10 +68,10 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 return RedirectToAction("Login");
             }
             int adminId = HttpContext.Session.GetInt32("AdminID").GetValueOrDefault();
-            return View(_wonder.Admins.Where(x=>x.Id ==adminId).FirstOrDefault());
+            return View(_wonder.Admins.Where(x => x.Id == adminId).FirstOrDefault());
         }
         [HttpPost]
-
+        [SessionFilter]
         public ActionResult UpdateAdminProfile(Admin admin)
         {
             if (ModelState.IsValid)
@@ -105,12 +124,9 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
         #region الطلاب
         //اضف جديد
+        [SessionFilter]
         public ActionResult AddNewStudent()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
             StudentAndParent model = new StudentAndParent();
             model.categories = _wonder.Categories.ToList();
             model.groups = _wonder.Groups.ToList();
@@ -118,64 +134,9 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
         }
         [HttpPost]
+        [SessionFilter]
         public ActionResult AddNewStudent(StudentAndParent studentAndparent)
         {
-            /*
-            if (ModelState.IsValid)
-            {
-                Student stuobj = new Student();
-
-                string stdNIdFileName = string.Empty;
-                if (studentAndparent.StudentNationalIDFile != null)
-                {
-                    Guid guid = Guid.NewGuid();
-
-                    string newfileName = guid.ToString();
-
-
-                    string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                    stdNIdFileName = studentAndparent.StudentNationalIDFile.FileName;
-                    string fullPath = Path.Combine(uploads, stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName));
-                    studentAndparent.StudentNationalIDFile.CopyTo(new FileStream(fullPath, FileMode.Create));
-                    stdNIdFileName = stdNIdFileName + newfileName + Path.GetExtension(stdNIdFileName);
-                }
-
-                stuobj.FirstName = studentAndparent.student.FirstName;
-                stuobj.LastName = studentAndparent.student.LastName;
-                stuobj.BirthDate = studentAndparent.student.BirthDate;
-                stuobj.Password = studentAndparent.student.Password;
-                stuobj.Phone = studentAndparent.student.Phone;
-                stuobj.Address = studentAndparent.student.Address;
-                stuobj.NationalIDFile = stdNIdFileName;
-                stuobj.ApplicationFile = studentAndparent.student.ApplicationFile;
-                stuobj.Gender = studentAndparent.student.Gender;
-                stuobj.Weight = studentAndparent.student.Weight;
-                stuobj.Height = studentAndparent.student.Height;
-                stuobj.BloodType = studentAndparent.student.BloodType;
-                stuobj.PowerOfSight = studentAndparent.student.PowerOfSight;
-                stuobj.AllergicTo = studentAndparent.student.AllergicTo;
-                stuobj.FavoriteFoot = studentAndparent.student.FavoriteFoot;
-                stuobj.VitaminDeficiency = studentAndparent.student.VitaminDeficiency;
-                stuobj.HealthProblems = studentAndparent.student.HealthProblems;
-                stuobj.HealthProblemsDesc = studentAndparent.student.HealthProblemsDesc;
-                stuobj.Nationality = studentAndparent.student.Nationality;
-                stuobj.ParentRelation = studentAndparent.student.ParentRelation;
-                stuobj.Category = studentAndparent.groups;
-                //stuobj.Group.GroupId= _wonder.Groups.Where(x => x.GroupId == studentAndparent.Group.GroupId).Select(x => x.GroupId).FirstOrDefault(); 
-
-                stuobj.ParentFirstName = studentAndparent.student.ParentFirstName;
-                stuobj.ParentLastName = studentAndparent.student.ParentLastName;
-                stuobj.ParentPhone = studentAndparent.student.ParentPhone;
-                stuobj.ParentEmergencyPhone = studentAndparent.student.ParentEmergencyPhone;
-
-                _wonder.Students.Add(stuobj);
-                _wonder.SaveChanges();
-
-                return RedirectToAction("StudentMenu");
-
-            }
-            return View(studentAndparent);
-            */
             if (ModelState.IsValid)
             {
                 if (studentAndparent.StudentNationalIDFile != null)
@@ -216,20 +177,15 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
 
         //قائمة الطلاب
+        [SessionFilter]
         public ActionResult StudentMenu()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
+
+
             return View();
         }
         public ActionResult StudentsData()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return Json("Unauthorized");
-            }
             List<StudentAndParent> data = new List<StudentAndParent>();
             var obj = _wonder.Students.Select(x => x).ToList();
             foreach (var item in obj)
@@ -260,21 +216,20 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 return Json("Error");
             }
         }
+        [SessionFilter]
         public IActionResult UpdateStudent(int id)
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
+
             UpdateStudentViewModel model = new UpdateStudentViewModel();
             model.student = _wonder.Students.Where(x => x.StudentId == id).FirstOrDefault();
             model.groups = _wonder.Groups.ToList();
             model.categories = _wonder.Categories.ToList();
-            
+
             return View(model);
         }
 
         [HttpPost]
+        [SessionFilter]
         public IActionResult UpdateStudent(UpdateStudentViewModel model)
         {
             if (ModelState.IsValid)
@@ -313,25 +268,23 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 x.student = model.student;
                 x.groups = _wonder.Groups.ToList();
                 x.categories = _wonder.Categories.ToList();
-               
+
                 return View(x);//RedirectToAction("UpdateStudent", "Home", new {id = student.StudentId ,student});
             }
         }
 
         //الحضور اليومي
+        [SessionFilter]
         public ActionResult DailyAttendance()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
-            
+
             AttendanceViewModel model = new AttendanceViewModel();
             model.students = _wonder.Students.ToList();
-            model.attendanceDate =  DateTime.UtcNow.ToString("D");
+            model.attendanceDate = DateTime.UtcNow.ToString("D");
             return View(model);
         }
         [HttpPost]
+        [SessionFilter]
         public ActionResult AddAttendance(AttendanceViewModel attendanceViewModel)
         {
             if (ModelState.IsValid)
@@ -340,8 +293,8 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 attendance.AttendanceDate = Convert.ToDateTime(DateTime.UtcNow.ToString("D"));
                 attendance.AttendanceStatus = attendanceViewModel.attendanceStatus;
                 attendance.StudentId = attendanceViewModel.studentId;
-                var registeredAttendance = _wonder.Attendances.Where(x=>x.AttendanceDate == attendance.AttendanceDate && x.StudentId == attendance.StudentId).ToList().Count;
-                if(registeredAttendance != 0)
+                var registeredAttendance = _wonder.Attendances.Where(x => x.AttendanceDate == attendance.AttendanceDate && x.StudentId == attendance.StudentId).ToList().Count;
+                if (registeredAttendance != 0)
                 {
                     TempData["attendanceRecordAlreadySaved"] = "لا تستطيع تسجيل نفس الطالب أكثر من مرة في نفس اليوم";
                     return RedirectToAction("DailyAttendance");
@@ -358,16 +311,13 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         #region الحضور
         public ActionResult getAttendances()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return Json("Unauthorized");
-            }
+
             List<AttendanceViewModel> att = new List<AttendanceViewModel>();
             var attendances = _wonder.Attendances.ToList();
             foreach (var item in attendances)
             {
                 AttendanceViewModel obj = new AttendanceViewModel();
-                obj.StudentName =_wonder.Students.Where(x => x.StudentId == item.StudentId).Select(x=>x.FirstName).FirstOrDefault()+" "+ _wonder.Students.Where(x => x.StudentId == item.StudentId).Select(x => x.LastName).FirstOrDefault();
+                obj.StudentName = _wonder.Students.Where(x => x.StudentId == item.StudentId).Select(x => x.FirstName).FirstOrDefault() + " " + _wonder.Students.Where(x => x.StudentId == item.StudentId).Select(x => x.LastName).FirstOrDefault();
                 obj.attendance = item;
                 att.Add(obj);
             }
@@ -391,6 +341,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             }
         }
         [HttpPost]
+        [SessionFilter]
         public ActionResult UpdateAttendance(AttendanceViewModel attendance)
         {
             var attendanceRow = _wonder.Attendances.Where(x => x.AttendanceId == attendance.attendanceId).FirstOrDefault();
@@ -412,25 +363,19 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
         #region تصنيف المشتركين
         //قائمة المشتركين
+        [SessionFilter]
         public ActionResult CategoryList()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
             return View();
         }
         public ActionResult getCategories()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return Json("Unauthorized");
-            }
             CategoryListViewModel model = new CategoryListViewModel();
             model.categories = _wonder.Categories.ToList();
             return Json(model);
         }
         [HttpPost]
+        [SessionFilter]
         public ActionResult CategoryList(Category model)
         {
             if (ModelState.IsValid)
@@ -460,6 +405,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
 
         [HttpPost]
+        [SessionFilter]
         public IActionResult UpdateCategory(Category cat)
         {
             if (ModelState.IsValid)
@@ -479,18 +425,16 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
         #region المجموعات
         //اضف جديد
+        [SessionFilter]
         public ActionResult AddNewGroup()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
             AddNewGroupViewModel model = new AddNewGroupViewModel();
             model.categories = _wonder.Categories.ToList();
             model.coaches = _wonder.Coachs.ToList();
             return View(model);
         }
         [HttpPost]
+        [SessionFilter]
         public ActionResult AddNewGroup(AddNewGroupViewModel model)
         {
             if (ModelState.IsValid)
@@ -508,22 +452,16 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
         }
 
         //قائمة المجموعات
+        [SessionFilter]
         public ActionResult GroupsMenu()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
             GroupListViewModel g = new GroupListViewModel();
             g.coaches = _wonder.Coachs.Select(x => x).ToList();
             return View(g);
         }
         public ActionResult getGroups()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return Json("Unauthorized");
-            }
+
             List<GroupListViewModel> data = new List<GroupListViewModel>();
             var obj = _wonder.Groups.Select(x => x).ToList();
             foreach (var item in obj)
@@ -580,18 +518,17 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 return Json("Error");
             }
         }
+        [SessionFilter]
         public IActionResult UpdateGroup(int id)
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
+
             var group = _wonder.Groups.Where(x => x.GroupId == id).FirstOrDefault();
             ViewBag.coaches = _wonder.Coachs.Select(x => x).ToList();
             ViewBag.categories = _wonder.Categories.Select(x => x).ToList();
             return View(group);
         }
         [HttpPost]
+        [SessionFilter]
         public IActionResult UpdateGroup(Group group)
         {
             if (ModelState.IsValid)
@@ -612,15 +549,14 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
         #region المدربين
         //اضف جديد
+        [SessionFilter]
         public ActionResult AddNewCoach()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
+
             return View();
         }
         [HttpPost]
+        [SessionFilter]
         public ActionResult AddNewCoach(AddNewCoachViewModel model)
         {
             if (ModelState.IsValid)
@@ -660,20 +596,14 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
         }
         //قائمة المدربين
+        [SessionFilter]
         public ActionResult CoachsMenu()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
             return View();
         }
         public ActionResult getCoaches()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return Json("Unauthorized");
-            }
+
             var coaches = _wonder.Coachs.ToList();
             foreach (var item in coaches)
             {
@@ -682,7 +612,6 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
             return Json(coaches);
         }
-
         public ActionResult DeleteCoach(int CoachId)
         {
             var coachRow = _wonder.Coachs.Where(x => x.CoachId == CoachId).FirstOrDefault();
@@ -698,28 +627,44 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
                 return Json("Error");
             }
         }
+        [SessionFilter]
         public IActionResult UpdateCoach(int id)
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
-            var coach = _wonder.Coachs.Where(x => x.CoachId == id).FirstOrDefault();
-            return View(coach);
+            AddNewCoachViewModel viewdata = new AddNewCoachViewModel();
+            viewdata.coach = _wonder.Coachs.Where(x => x.CoachId == id).FirstOrDefault();
+
+            return View(viewdata);
         }
 
         [HttpPost]
-        public IActionResult UpdateCoach(Coach coach)
+        [SessionFilter]
+        public IActionResult UpdateCoach(AddNewCoachViewModel coachvm)
         {
             if (ModelState.IsValid)
             {
-                _wonder.Entry(coach).State = EntityState.Modified;
+                if (coachvm.CV != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString() + Path.GetExtension(coachvm.CV.FileName);
+                    string path = Path.Combine(hostingEnvironment.WebRootPath, "uploads", newfileName);
+                    coachvm.CV.CopyTo(new FileStream(path, FileMode.Create));
+                    coachvm.coach.CVFile = newfileName;
+                }
+                if (coachvm.Image != null)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string newfileName = guid.ToString() + Path.GetExtension(coachvm.Image.FileName);
+                    string path = Path.Combine(hostingEnvironment.WebRootPath, "uploads", newfileName);
+                    coachvm.Image.CopyTo(new FileStream(path, FileMode.Create));
+                    coachvm.coach.Image = newfileName;
+                }
+                _wonder.Entry(coachvm.coach).State = EntityState.Modified;
                 _wonder.SaveChanges();
                 return RedirectToAction("CoachsMenu");
             }
             else
             {
-                return RedirectToAction("UpdateCoach", coach.CoachId);
+                return RedirectToAction("UpdateCoach", coachvm.coach.CoachId);
             }
 
 
@@ -729,15 +674,13 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
 
         #region المصروفات
+        [SessionFilter]
         public ActionResult AddExpense()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
             return View();
         }
         [HttpPost]
+        [SessionFilter]
         public ActionResult AddExpense(Expense expense)
         {
             if (ModelState.IsValid)
@@ -754,20 +697,19 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
             return View(expense);
         }
+        [SessionFilter]
         public ActionResult UpdateExpense(int id)
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
+
             Expense expense = _wonder.Expenses.Where(x => x.ExpenseId == id).SingleOrDefault();
-            if(expense == null)
+            if (expense == null)
             {
                 return NotFound();
             }
             return View(expense);
         }
         [HttpPost]
+        [SessionFilter]
         public ActionResult UpdateExpense(Expense exp)
         {
             if (ModelState.IsValid)
@@ -783,20 +725,15 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             }
             return View(exp);
         }
+        [SessionFilter]
         public ActionResult ExpenseList()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return RedirectToAction("Login");
-            }
+
             return View();
         }
         public ActionResult GetExpenseList()
         {
-            if ((HttpContext.Session.GetInt32("AdminID").GetValueOrDefault()) == 0)
-            {
-                return Json("Unauthorized");
-            }
+
             var exp = _wonder.Expenses.ToList();
             return Json(exp);
         }
@@ -819,11 +756,12 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
 
 
         #region الدفع 
-
+        [SessionFilter]
         public IActionResult Payment()
         {
             return View();
         }
+
         public IActionResult PaymentData()
         {
             var students = _wonder.Students.ToList();
@@ -838,6 +776,7 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             }
             return Json(StudentWithPayDate);
         }
+
         public IActionResult HoldStudentPayment(int StudentId)
         {
             var student = _wonder.Students.Where(x => x.StudentId == StudentId).FirstOrDefault();
@@ -854,11 +793,84 @@ namespace JeddahSnipers.Areas.Dashboard.Controllers
             _wonder.SaveChanges();
             return Json("played successfully");
         }
+        [SessionFilter]
+
         public ActionResult StudentPayment(int id)
         {
-            return View();
+            if (id != null)
+            {
+                StudentPaymentViewModel stpvm = new StudentPaymentViewModel();
+                stpvm.studentId = id;
+                return View(stpvm);
+
+            }
+            return NotFound();
         }
+        [HttpPost]
+        [SessionFilter]
+
+        public ActionResult StudentPayment(StudentPaymentViewModel stpvm)
+        {
+            stpvm.payment.PaymentDate = Convert.ToDateTime(DateTime.UtcNow.ToString("D"));
+            if (ModelState.IsValid)
+            {
+                stpvm.payment.EndDate = stpvm.payment.StartDate.AddMonths(stpvm.payment.Duration);
+                stpvm.payment.StudentId = stpvm.studentId;
+                _wonder.Payments.Add(stpvm.payment);
+                _wonder.Students.Where(x => x.StudentId == stpvm.studentId).FirstOrDefault().Status = "active";
+                _wonder.SaveChanges();
+                return RedirectToAction("Payment");
+
+            }
+            return View(stpvm);
+        }
+
+        public ActionResult StudentPaymentsData(int id)
+        {
+            var payment = _wonder.Payments.Where(x => x.StudentId == id).ToList();
+            return Json(payment);
+        }
+
+        public ActionResult DeleteStudentPayment(int id)
+        {
+
+            var p = _wonder.Payments.Where(x => x.PaymentId == id).FirstOrDefault();
+
+            if (p != null)
+            {
+                _wonder.Payments.Remove(p);
+                _wonder.SaveChanges();
+                return Json("Deleted Done");
+            }
+            else
+            {
+                return Json("Error");
+            }
+        }
+        [SessionFilter]
+
+        public ActionResult UpdateStudentPayment(int id)
+        {
+            var p = _wonder.Payments.Where(x => x.PaymentId == id).FirstOrDefault();
+            return View(p);
+        }
+        [HttpPost]
+        [SessionFilter]
+        public ActionResult UpdateStudentPayment(Payment p)
+        {
+            p.PaymentDate = Convert.ToDateTime(DateTime.UtcNow.ToString("D"));
+            if (ModelState.IsValid)
+            {
+                p.EndDate = p.StartDate.AddMonths(p.Duration);
+                _wonder.Entry(p).State = EntityState.Modified;
+                _wonder.SaveChanges();
+                return RedirectToAction("Payment");
+
+            }
+            return View(p);
+        }
+
         #endregion
 
-    }
+    }  
 }

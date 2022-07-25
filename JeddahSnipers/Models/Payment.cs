@@ -18,7 +18,7 @@ namespace JeddahSnipers.Models
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -26,7 +26,6 @@ namespace JeddahSnipers.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]

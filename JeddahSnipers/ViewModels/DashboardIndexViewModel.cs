@@ -11,6 +11,7 @@ namespace JeddahSnipers.ViewModels
         public int? groupsCount { get; set; }
         public IQueryable<LastStudentsViewModel> LastStudents { get; set; }
         public IQueryable<LastGroupsViewModel> LastGroups { get; set; }
-
+        public IQueryable<HoldAttendanceViewModel> HoldAttendance { get; set; }
+        public IQueryable<ExpiredPaymentViewModel> ExpiredPayments { get; set; }
     }
 }
