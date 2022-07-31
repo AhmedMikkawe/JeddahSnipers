@@ -25,7 +25,7 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
             <!-- ./col -->
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-3 col-12">
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
@@ -39,7 +39,7 @@
                 </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-3 col-12">
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-3 col-12">
                 <!-- small box -->
                 <div class="small-box bg-danger">
                     <div class="inner">
@@ -79,31 +79,34 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th style="width: 10px">#</th>
-                      <th>الاسم</th>
-                      <th>التصنيف</th>
-                      <th style="width: 40px">الجنسية</th>
-                      <th>العمر</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                  <div style="overflow-x:auto">
+                     <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th style="width: 10px">#</th>
+                          <th>الاسم</th>
+                          <th>التصنيف</th>
+                          <th style="width: 40px">الجنسية</th>
+                          <th>العمر</th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      @foreach (var item in Model.LastStudents)
-                      {
-                          <tr>
-                             <td>@item.StudentId</td>
-                             <td>@item.StudentFirstName @item.StudentLastName</td>
-                             <td>@item.CategoryName</td>
-                              <td>@item.StudentNationality</td>
-                              <td>@item.StudentAge</td>
+                          @foreach (var item in Model.LastStudents)
+                          {
+                              <tr>
+                                 <td>@item.StudentId</td>
+                                 <td>@item.StudentFirstName @item.StudentLastName</td>
+                                 <td>@item.CategoryName</td>
+                                  <td>@item.StudentNationality</td>
+                                  <td>@item.StudentAge</td>
 
-                          </tr>
-                      }  
-                  </tbody>
-                </table>
+                              </tr>
+                          }  
+                      </tbody>
+                    </table>
+                  </div>
+            
               </div>
               <!-- /.card-body -->
             </div>
@@ -119,31 +122,34 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th style="width: 10px">#</th>
-                      <th>الاسم</th>
-                      <th>عدد الطلاب</th>
-                      <th>الوقت</th>
-                      <th>اسم المدرب</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                  <div style="overflow-x:auto">
 
-                      @foreach (var item in Model.LastGroups)
-                      {
-                          <tr>
-                             <td>@item.GroupId</td>
-                             <td>@item.GroupName</td>
-                             <td>@item.StudentsCount</td>
-                              <td>From @item.StartTime To @item.EndTime</td>
-                              <td>@item.CoachFirstName @item.CoachLastName</td>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th style="width: 10px">#</th>
+                          <th>الاسم</th>
+                          <th>عدد الطلاب</th>
+                          <th>الوقت</th>
+                          <th>اسم المدرب</th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                          </tr>
-                      }  
-                  </tbody>
-                </table>
+                          @foreach (var item in Model.LastGroups)
+                          {
+                              <tr>
+                                 <td>@item.GroupId</td>
+                                 <td>@item.GroupName</td>
+                                 <td>@item.StudentsCount</td>
+                                  <td>From @item.StartTime To @item.EndTime</td>
+                                  <td>@item.CoachFirstName @item.CoachLastName</td>
+
+                              </tr>
+                          }  
+                      </tbody>
+                    </table>
+                  </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -156,28 +162,30 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>رقم الهوية</th>
-                      <th>التصنيف</th>
-                      <th>الاسم</th>
-                      <th>رقم الجوال</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                  <div style="overflow-x:auto">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>رقم الهوية</th>
+                          <th>التصنيف</th>
+                          <th>الاسم</th>
+                          <th>رقم الجوال</th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      @foreach (var item in Model.HoldAttendance)
-                      {
-                          <tr>
-                             <td>@item.StudentId</td>
-                             <td>@item.CategoryName</td>
-                              <td>@item.StudentFirstName @item.StudentLastName</td>
-                             <td>@item.StudentPhone</td>
-                          </tr>
-                      }  
-                  </tbody>
-                </table>
+                          @foreach (var item in Model.HoldAttendance)
+                          {
+                              <tr>
+                                 <td>@item.StudentId</td>
+                                 <td>@item.CategoryName</td>
+                                  <td>@item.StudentFirstName @item.StudentLastName</td>
+                                 <td>@item.StudentPhone</td>
+                              </tr>
+                          }  
+                      </tbody>
+                    </table>
+                  </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -190,28 +198,30 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>الاسم</th>
-                      <th>المدة</th>
-                      <th>انتهاء الاشتراك</th>
-                      <th>المبلغ</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                  <div style="overflow-x:auto">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>الاسم</th>
+                          <th>المدة</th>
+                          <th>انتهاء الاشتراك</th>
+                          <th>المبلغ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-                      @foreach (var item in Model.ExpiredPayments)
-                      {
-                          <tr>
-                             <td>@item.StudentName</td>
-                             <td>@item.Duration</td>
-                              <td>@item.EndDate</td>
-                             <td>@item.Amount</td>
-                          </tr>
-                      }  
-                  </tbody>
-                </table>
+                          @foreach (var item in Model.ExpiredPayments)
+                          {
+                              <tr>
+                                 <td>@item.StudentName</td>
+                                 <td>@item.Duration</td>
+                                  <td>@item.EndDate</td>
+                                 <td>@item.Amount</td>
+                              </tr>
+                          }  
+                      </tbody>
+                    </table>
+                  </div>
               </div>
               <!-- /.card-body -->
             </div>
